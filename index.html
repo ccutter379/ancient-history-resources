@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Treatment and Display of Human Remains — Extended Response</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap');
+
+  :root {
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --bg: #FFFFFF;
+    --bg-soft: #F4F4F5;
+    --bg-dark: #0F0F0F;
+    --accent: #B8C4FF;
+    --accent-strong: #8B9BF7;
+    --accent-bg: #EEF0FF;
+    --text: #0F0F0F;
+    --text-light: #71717A;
+    --text-on-dark: #FAFAFA;
+    --border: #E4E4E7;
+    --radius: 12px;
+
+    /* PEEL body paragraph colours */
+    --color-point: #DBEAFE;
+    --color-evidence: #FEF3C7;
+    --color-explain: #D1FAE5;
+    --color-link: #EDE9FE;
+    --chip-point: #60A5FA;
+    --chip-evidence: #FBBF24;
+    --chip-explain: #34D399;
+    --chip-link: #A78BFA;
+
+    /* Intro/Conclusion feature colours */
+    --color-position: #FECDD3;
+    --color-roadmap: #C7D2FE;
+    --color-stimulus: #FECDD3;
+    --color-conditional: #BBF7D0;
+    --color-elevation: #DDD6FE;
+    --chip-position: #FB7185;
+    --chip-roadmap: #818CF8;
+    --chip-stimulus: #FB7185;
+    --chip-conditional: #4ADE80;
+    --chip-elevation: #A78BFA;
+
+    /* Judgement language */
+    --chip-judge: #FB923C;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 17px; }
+  body {
+    font-family: var(--font-body); color: var(--text);
+    background: var(--bg); line-height: 1.7; -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border); padding: 0 2rem;
+  }
+  nav ul { list-style: none; display: flex; max-width: 1100px; margin: 0 auto; overflow-x: auto; gap: 0.25rem; }
+  nav a {
+    display: block; padding: 0.9rem 1.2rem; color: var(--text-light); text-decoration: none;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase;
+    white-space: nowrap; border-radius: 6px; transition: all 0.2s;
+  }
+  nav a:hover { color: var(--text); background: var(--bg-soft); }
+
+  /* HERO */
+  .hero {
+    background: var(--accent); padding: 5rem 2rem 4.5rem; text-align: left;
+  }
+  .hero-inner { max-width: 960px; margin: 0 auto; }
+  .hero-label {
+    display: inline-block; font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--text);
+    background: rgba(255,255,255,0.5); padding: 0.35em 1em; border-radius: 100px; margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: var(--font-display); font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+    font-weight: 400; line-height: 1.15; max-width: 700px; margin-bottom: 1rem; color: var(--text);
+  }
+  .hero-subtitle {
+    font-family: var(--font-body); font-size: clamp(0.88rem, 1.8vw, 1.05rem);
+    font-weight: 600; letter-spacing: 0.02em; color: var(--text); opacity: 0.65;
+    max-width: 550px; margin-bottom: 0.5rem;
+  }
+  .hero p { font-size: 1.05rem; color: var(--text); opacity: 0.7; max-width: 550px; line-height: 1.6; }
+
+  /* LAYOUT */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 2rem; }
+  section { padding: 4rem 0; }
+  .section-label {
+    display: inline-block; font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-strong);
+    background: var(--accent-bg); padding: 0.35em 1em; border-radius: 100px; margin-bottom: 1rem;
+  }
+  h2 {
+    font-family: var(--font-display); font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 400; line-height: 1.2; margin-bottom: 0.75rem;
+  }
+  h3 { font-family: var(--font-body); font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
+  p { margin-bottom: 1rem; }
+  /* LISC TABLE */
+  .lisc-section { padding: 3rem 0 0; }
+  .lisc-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    border-radius: var(--radius); overflow: hidden;
+    border: 1px solid var(--border); margin: 1.5rem 0 0;
+  }
+  .lisc-table th, .lisc-table td {
+    text-align: left; padding: 1rem 1.5rem; vertical-align: top;
+    font-size: 0.92rem; line-height: 1.6;
+  }
+  .lisc-table thead th {
+    background: var(--bg-dark); color: var(--text-on-dark);
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .lisc-table thead th:first-child { width: 38%; }
+  .lisc-table tbody td { background: var(--bg); border-bottom: 1px solid var(--border); }
+  .lisc-table tbody tr:last-child td { border-bottom: none; }
+  .lisc-table tbody td:first-child {
+    background: var(--bg-soft); font-weight: 600; border-right: 1px solid var(--border);
+  }
+  .lisc-table ul { padding-left: 1.2rem; margin: 0; }
+  .lisc-table li { margin-bottom: 0.35rem; }
+  .lisc-table li:last-child { margin-bottom: 0; }
+
+  .section-divider { height: 1px; background: var(--border); }
+
+  /* QUESTION BOX */
+  .question-box {
+    background: var(--bg-dark); color: var(--text-on-dark);
+    padding: 2.5rem 3rem; border-radius: var(--radius);
+    margin: 2rem 0; font-family: var(--font-display); font-size: 1.25rem; line-height: 1.55;
+  }
+  .question-box .marks {
+    display: block; font-family: var(--font-body); font-size: 0.75rem;
+    color: var(--text-light); margin-top: 1rem; letter-spacing: 0.04em;
+    text-transform: uppercase; font-weight: 600;
+  }
+
+  /* DECONSTRUCTION REVEAL SYSTEM */
+  .step-block {
+    background: var(--bg-soft); border-radius: var(--radius);
+    padding: 2rem 2.5rem; margin-bottom: 1.25rem;
+  }
+  .step-block .step-tag {
+    display: inline-block; font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-strong); margin-bottom: 0.5rem;
+  }
+  .step-block p.step-prompt { font-size: 0.95rem; color: var(--text-light); margin-bottom: 0; }
+  .reveal-item {
+    opacity: 0; max-height: 0; overflow: hidden;
+    transition: opacity 0.4s ease, max-height 0.5s ease, margin 0.4s ease;
+    margin-top: 0;
+  }
+  .reveal-item.revealed { opacity: 1; max-height: 600px; margin-top: 0.75rem; }
+  .reveal-answer {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem 1.25rem; font-size: 0.95rem; line-height: 1.6;
+  }
+  .reveal-answer.highlight { background: var(--accent-bg); border-color: var(--accent); }
+  .reveal-answer .label-sm {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); display: block; margin-bottom: 0.3rem;
+  }
+  .kw-row {
+    display: grid; grid-template-columns: 1fr 1.4fr 1.4fr; gap: 0.75rem;
+    padding: 1rem 1.25rem; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; font-size: 0.9rem; line-height: 1.55;
+  }
+  .kw-row .kw-term { font-weight: 700; }
+  .kw-row .kw-ask { color: var(--text-light); font-style: italic; }
+  .check-item {
+    padding: 0.8rem 1.25rem 0.8rem 2.8rem; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem; position: relative;
+  }
+  .check-item::before {
+    content: ''; position: absolute; left: 1.1rem; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; border-radius: 4px; border: 2px solid var(--border);
+  }
+  .reveal-btn-wrap {
+    position: sticky; bottom: 1.5rem; z-index: 50; text-align: center;
+    margin-top: 2rem; pointer-events: none;
+  }
+  .reveal-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.85rem 2rem; font-size: 0.88rem; font-weight: 700; font-family: var(--font-body);
+    color: var(--text-on-dark); background: var(--bg-dark); border: none; border-radius: 100px;
+    cursor: pointer; box-shadow: 0 4px 24px rgba(0,0,0,0.18); transition: all 0.2s; pointer-events: all;
+  }
+  .reveal-btn:hover { background: #2A2A2A; transform: translateY(-1px); }
+  .reveal-btn.done { background: var(--accent-strong); color: #fff; cursor: default; }
+
+  /* ================================================================
+     EXEMPLAR TOGGLE SYSTEM
+     ================================================================ */
+  .toggle-cb { display: none; }
+
+  /* Legend */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin: 1.5rem 0; padding: 1.1rem 1.25rem;
+    background: var(--bg-soft); border-radius: var(--radius); font-size: 0.75rem; font-weight: 600;
+  }
+  .legend-group-label {
+    width: 100%; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-light); margin-top: 0.3rem;
+  }
+  .legend-group-label:first-child { margin-top: 0; }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+  .legend-chip { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+  .legend-chip.underline {
+    width: 18px; height: 3px; border-radius: 2px; background: var(--chip-judge);
+  }
+
+  /* Para blocks */
+  .para-block {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); margin: 1.25rem 0; overflow: hidden;
+  }
+  .para-block-header {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+    padding: 0.9rem 1.5rem; background: var(--bg-soft); border-bottom: 1px solid var(--border);
+  }
+  .para-block-title { font-weight: 700; font-size: 0.85rem; color: var(--text); }
+  .toggle-controls { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .toggle-label {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.35rem 0.75rem; font-size: 0.72rem; font-weight: 700;
+    border-radius: 100px; cursor: pointer; border: 1.5px solid var(--border);
+    background: var(--bg); transition: all 0.2s; user-select: none;
+  }
+  .toggle-label:hover { border-color: #999; }
+  .toggle-label .chip { width: 8px; height: 8px; border-radius: 2px; }
+  .toggle-label .chip-line { width: 12px; height: 2.5px; border-radius: 2px; background: var(--chip-judge); }
+
+  .para-block-body { padding: 2rem 2rem; font-size: 1rem; line-height: 1.85; }
+
+  /* Highlight spans — transparent by default */
+  .hl-point, .hl-evidence, .hl-explain, .hl-link,
+  .hl-position, .hl-roadmap,
+  .hl-stimulus, .hl-conditional, .hl-elevation {
+    border-radius: 4px; padding: 0.1em 0.15em; transition: background 0.35s;
+  }
+  /* Judgement spans — underline style */
+  .hl-judge {
+    transition: all 0.35s;
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2.5px;
+    text-underline-offset: 4px;
+    text-decoration-style: wavy;
+  }
+
+  /* === INTRODUCTION TOGGLES === */
+  #intro-position:checked ~ .para-block-body .hl-position { background: var(--color-position); }
+  #intro-roadmap:checked ~ .para-block-body .hl-roadmap { background: var(--color-roadmap); }
+  #intro-judge:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #intro-all:checked ~ .para-block-body .hl-position { background: var(--color-position); }
+  #intro-all:checked ~ .para-block-body .hl-roadmap { background: var(--color-roadmap); }
+  #intro-all:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #intro-position:checked ~ .para-block-header .toggle-label[for="intro-position"] { border-color: var(--chip-position); background: var(--chip-position); color: #fff; }
+  #intro-roadmap:checked ~ .para-block-header .toggle-label[for="intro-roadmap"] { border-color: var(--chip-roadmap); background: var(--chip-roadmap); color: #fff; }
+  #intro-judge:checked ~ .para-block-header .toggle-label[for="intro-judge"] { border-color: var(--chip-judge); background: var(--chip-judge); color: #fff; }
+  #intro-all:checked ~ .para-block-header .toggle-label[for="intro-all"] { border-color: var(--bg-dark); background: var(--bg-dark); color: #fff; }
+
+  /* === PARAGRAPH 1 TOGGLES === */
+  #p1-point:checked ~ .para-block-body .hl-point { background: var(--color-point); }
+  #p1-evidence:checked ~ .para-block-body .hl-evidence { background: var(--color-evidence); }
+  #p1-explain:checked ~ .para-block-body .hl-explain { background: var(--color-explain); }
+  #p1-link:checked ~ .para-block-body .hl-link { background: var(--color-link); }
+  #p1-judge:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #p1-all:checked ~ .para-block-body .hl-point { background: var(--color-point); }
+  #p1-all:checked ~ .para-block-body .hl-evidence { background: var(--color-evidence); }
+  #p1-all:checked ~ .para-block-body .hl-explain { background: var(--color-explain); }
+  #p1-all:checked ~ .para-block-body .hl-link { background: var(--color-link); }
+  #p1-all:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #p1-point:checked ~ .para-block-header .toggle-label[for="p1-point"] { border-color: var(--chip-point); background: var(--chip-point); color: #fff; }
+  #p1-evidence:checked ~ .para-block-header .toggle-label[for="p1-evidence"] { border-color: var(--chip-evidence); background: var(--chip-evidence); color: #fff; }
+  #p1-explain:checked ~ .para-block-header .toggle-label[for="p1-explain"] { border-color: var(--chip-explain); background: var(--chip-explain); color: #fff; }
+  #p1-link:checked ~ .para-block-header .toggle-label[for="p1-link"] { border-color: var(--chip-link); background: var(--chip-link); color: #fff; }
+  #p1-judge:checked ~ .para-block-header .toggle-label[for="p1-judge"] { border-color: var(--chip-judge); background: var(--chip-judge); color: #fff; }
+  #p1-all:checked ~ .para-block-header .toggle-label[for="p1-all"] { border-color: var(--bg-dark); background: var(--bg-dark); color: #fff; }
+
+  /* === PARAGRAPH 2 TOGGLES === */
+  #p2-point:checked ~ .para-block-body .hl-point { background: var(--color-point); }
+  #p2-evidence:checked ~ .para-block-body .hl-evidence { background: var(--color-evidence); }
+  #p2-explain:checked ~ .para-block-body .hl-explain { background: var(--color-explain); }
+  #p2-link:checked ~ .para-block-body .hl-link { background: var(--color-link); }
+  #p2-judge:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #p2-all:checked ~ .para-block-body .hl-point { background: var(--color-point); }
+  #p2-all:checked ~ .para-block-body .hl-evidence { background: var(--color-evidence); }
+  #p2-all:checked ~ .para-block-body .hl-explain { background: var(--color-explain); }
+  #p2-all:checked ~ .para-block-body .hl-link { background: var(--color-link); }
+  #p2-all:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #p2-point:checked ~ .para-block-header .toggle-label[for="p2-point"] { border-color: var(--chip-point); background: var(--chip-point); color: #fff; }
+  #p2-evidence:checked ~ .para-block-header .toggle-label[for="p2-evidence"] { border-color: var(--chip-evidence); background: var(--chip-evidence); color: #fff; }
+  #p2-explain:checked ~ .para-block-header .toggle-label[for="p2-explain"] { border-color: var(--chip-explain); background: var(--chip-explain); color: #fff; }
+  #p2-link:checked ~ .para-block-header .toggle-label[for="p2-link"] { border-color: var(--chip-link); background: var(--chip-link); color: #fff; }
+  #p2-judge:checked ~ .para-block-header .toggle-label[for="p2-judge"] { border-color: var(--chip-judge); background: var(--chip-judge); color: #fff; }
+  #p2-all:checked ~ .para-block-header .toggle-label[for="p2-all"] { border-color: var(--bg-dark); background: var(--bg-dark); color: #fff; }
+
+  /* === PARAGRAPH 3 TOGGLES === */
+  #p3-point:checked ~ .para-block-body .hl-point { background: var(--color-point); }
+  #p3-evidence:checked ~ .para-block-body .hl-evidence { background: var(--color-evidence); }
+  #p3-explain:checked ~ .para-block-body .hl-explain { background: var(--color-explain); }
+  #p3-link:checked ~ .para-block-body .hl-link { background: var(--color-link); }
+  #p3-judge:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #p3-all:checked ~ .para-block-body .hl-point { background: var(--color-point); }
+  #p3-all:checked ~ .para-block-body .hl-evidence { background: var(--color-evidence); }
+  #p3-all:checked ~ .para-block-body .hl-explain { background: var(--color-explain); }
+  #p3-all:checked ~ .para-block-body .hl-link { background: var(--color-link); }
+  #p3-all:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #p3-point:checked ~ .para-block-header .toggle-label[for="p3-point"] { border-color: var(--chip-point); background: var(--chip-point); color: #fff; }
+  #p3-evidence:checked ~ .para-block-header .toggle-label[for="p3-evidence"] { border-color: var(--chip-evidence); background: var(--chip-evidence); color: #fff; }
+  #p3-explain:checked ~ .para-block-header .toggle-label[for="p3-explain"] { border-color: var(--chip-explain); background: var(--chip-explain); color: #fff; }
+  #p3-link:checked ~ .para-block-header .toggle-label[for="p3-link"] { border-color: var(--chip-link); background: var(--chip-link); color: #fff; }
+  #p3-judge:checked ~ .para-block-header .toggle-label[for="p3-judge"] { border-color: var(--chip-judge); background: var(--chip-judge); color: #fff; }
+  #p3-all:checked ~ .para-block-header .toggle-label[for="p3-all"] { border-color: var(--bg-dark); background: var(--bg-dark); color: #fff; }
+
+  /* === CONCLUSION TOGGLES === */
+  #conc-stimulus:checked ~ .para-block-body .hl-stimulus { background: var(--color-stimulus); }
+  #conc-conditional:checked ~ .para-block-body .hl-conditional { background: var(--color-conditional); }
+  #conc-elevation:checked ~ .para-block-body .hl-elevation { background: var(--color-elevation); }
+  #conc-judge:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #conc-all:checked ~ .para-block-body .hl-stimulus { background: var(--color-stimulus); }
+  #conc-all:checked ~ .para-block-body .hl-conditional { background: var(--color-conditional); }
+  #conc-all:checked ~ .para-block-body .hl-elevation { background: var(--color-elevation); }
+  #conc-all:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #conc-stimulus:checked ~ .para-block-header .toggle-label[for="conc-stimulus"] { border-color: var(--chip-stimulus); background: var(--chip-stimulus); color: #fff; }
+  #conc-conditional:checked ~ .para-block-header .toggle-label[for="conc-conditional"] { border-color: var(--chip-conditional); background: var(--chip-conditional); color: #fff; }
+  #conc-elevation:checked ~ .para-block-header .toggle-label[for="conc-elevation"] { border-color: var(--chip-elevation); background: var(--chip-elevation); color: #fff; }
+  #conc-judge:checked ~ .para-block-header .toggle-label[for="conc-judge"] { border-color: var(--chip-judge); background: var(--chip-judge); color: #fff; }
+  #conc-all:checked ~ .para-block-header .toggle-label[for="conc-all"] { border-color: var(--bg-dark); background: var(--bg-dark); color: #fff; }
+
+  /* Teacher prompt */
+  .teacher-prompt {
+    background: var(--accent-bg); border: 1px solid var(--accent); border-radius: var(--radius);
+    padding: 1rem 1.5rem; margin: -0.25rem 0 1.25rem; font-size: 0.85rem; line-height: 1.55; color: #4338CA;
+  }
+  .teacher-prompt strong { color: #4338CA; }
+
+  /* FEATURE GUIDE */
+  .annotation-block { display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin: 2rem 0; }
+  @media (min-width: 700px) { .annotation-block { grid-template-columns: 1fr 1fr; } }
+  .anno-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .anno-card-header {
+    padding: 0.9rem 1.25rem; font-weight: 700; font-size: 0.82rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .anno-card-body { padding: 0 1.25rem 1.25rem; font-size: 0.88rem; line-height: 1.65; }
+  .anno-card-body blockquote {
+    border-left: 3px solid var(--border); padding-left: 1rem; margin: 0.7rem 0;
+    color: var(--text-light); font-style: italic; font-size: 0.85rem;
+  }
+  .anno-card-body .tip {
+    background: var(--bg-soft); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.75rem;
+    font-size: 0.82rem; border-left: 3px solid var(--accent-strong);
+  }
+  .anno-card-body .tip strong { color: var(--accent-strong); }
+
+  .tips-grid { display: grid; gap: 1.25rem; margin: 1.5rem 0; }
+  @media (min-width: 700px) { .tips-grid { grid-template-columns: 1fr 1fr; } }
+  .tip-card { background: var(--bg-soft); border-radius: var(--radius); padding: 1.5rem 1.75rem; }
+  .tip-card h4 { font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .tip-card ul { padding-left: 1.1rem; font-size: 0.88rem; }
+  .tip-card li { margin-bottom: 0.35rem; }
+
+  footer { background: var(--bg-dark); color: #71717A; text-align: center; padding: 2.5rem 2rem; font-size: 0.75rem; }
+
+  @media (max-width: 600px) {
+    html { font-size: 15px; }
+    .para-block-body { padding: 1.25rem; }
+    .question-box { padding: 1.5rem; }
+    .step-block { padding: 1.5rem; }
+    .kw-row { grid-template-columns: 1fr; gap: 0.25rem; }
+    .hero { padding: 3rem 1.5rem 2.5rem; }
+    .toggle-controls { gap: 0.25rem; }
+    .toggle-label { padding: 0.3rem 0.6rem; font-size: 0.65rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <ul>
+    <li><a href="#question">The Question</a></li>
+    <li><a href="#deconstruct">Deconstruct</a></li>
+    <li><a href="#exemplar">Exemplar</a></li>
+    <li><a href="#features">Feature Guide</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-label">Ancient History &middot; Extended Response</span>
+    <h1>The Treatment and Display of Human Remains</h1>
+    <p class="hero-subtitle">How to Write a Band 5/6 Extended Response</p>
+    <p>Deconstruct the question, analyse a model answer paragraph by paragraph, and master the PEEL structure.</p>
+  </div>
+</header>
+
+<!-- LEARNING INTENTION & SUCCESS CRITERIA -->
+<section class="lisc-section">
+  <div class="container">
+    <table class="lisc-table">
+      <thead>
+        <tr>
+          <th>Learning Intention</th>
+          <th>Success Criteria</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            We are learning to deconstruct extended response questions and analyse how a Band 5/6 response is structured, so we can apply these techniques to our own writing on ethical issues in Ancient History.
+          </td>
+          <td>
+            <ul>
+              <li>I can identify the command verb, stimulus, and key content words in an extended response question</li>
+              <li>I can explain what &ldquo;evaluate&rdquo; requires and how it differs from &ldquo;describe&rdquo; or &ldquo;explain&rdquo;</li>
+              <li>I can identify the PEEL structure (Point, Evidence, Explain, Link) within a body paragraph</li>
+              <li>I can recognise the features of an effective introduction (position and roadmap) and conclusion (return to stimulus, conditional judgement, elevation)</li>
+              <li>I can identify judgement language throughout a response and explain why it is essential for evaluation</li>
+              <li>I can plan and begin drafting my own extended response using the PEEL framework and evaluative language</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SECTION 1: THE QUESTION -->
+<section id="question">
+  <div class="container">
+    <span class="section-label">Part 1</span>
+    <h2>The Question</h2>
+    <p>Read the question carefully. Before writing, you need to understand exactly what it demands.</p>
+    <div class="question-box">
+      <em>&ldquo;Museums are the rightful guardians of human remains.&rdquo;</em><br><br>
+      Evaluate this statement with reference to the ethical debates surrounding the study, display, and repatriation of ancient human remains.
+      <span class="marks">20 Marks &middot; 40&ndash;45 minutes &middot; 600&ndash;800 words</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SECTION 2: DECONSTRUCTION -->
+<section id="deconstruct">
+  <div class="container">
+    <span class="section-label">Part 2</span>
+    <h2>Deconstructing the Question</h2>
+    <p>Work through each step. Write down your own answers first, then reveal to check.</p>
+
+    <div class="reveal-section" id="revealSection">
+      <!-- STEP 1 -->
+      <div class="step-block">
+        <span class="step-tag">Step 1</span>
+        <h3>Identify the Command Verb</h3>
+        <p class="step-prompt">What is the key verb telling you what to do? Write it down.</p>
+        <div class="reveal-item" data-reveal="1">
+          <div class="reveal-answer highlight">
+            <span class="label-sm">The command verb is</span>
+            <strong style="font-size:1.15rem;">EVALUATE</strong>
+          </div>
+        </div>
+        <p class="step-prompt reveal-item" data-reveal="2" style="margin-top:0.75rem; margin-bottom:0.25rem; font-size:0.88rem; color:var(--text-light);">What does &ldquo;evaluate&rdquo; require? What mistakes should you avoid?</p>
+        <div class="reveal-item" data-reveal="2">
+          <div class="reveal-answer"><strong>Weigh up arguments on both sides</strong> &mdash; avoid only arguing one side</div>
+        </div>
+        <div class="reveal-item" data-reveal="3">
+          <div class="reveal-answer"><strong>Reach a clear, reasoned judgement</strong> &mdash; avoid listing arguments without a judgement</div>
+        </div>
+        <div class="reveal-item" data-reveal="4">
+          <div class="reveal-answer"><strong>Consider strength and limitations of each position</strong> &mdash; avoid describing without explaining significance</div>
+        </div>
+        <div class="reveal-item" data-reveal="5">
+          <div class="reveal-answer"><strong>Use case studies and legal frameworks as evidence</strong> &mdash; avoid claims without evidence</div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-block">
+        <span class="step-tag">Step 2</span>
+        <h3>Identify the Stimulus</h3>
+        <p class="step-prompt">What statement are you responding to? What does the verb require you to do with it?</p>
+        <div class="reveal-item" data-reveal="6">
+          <div class="reveal-answer highlight">
+            <span class="label-sm">The stimulus is</span>
+            <strong>&ldquo;Museums are the rightful guardians of human remains.&rdquo;</strong>
+          </div>
+        </div>
+        <div class="reveal-item" data-reveal="7">
+          <div class="reveal-answer">You are <strong>not</strong> asked whether this is true &mdash; you must <strong>evaluate</strong> it: examine when it might hold true, and when it clearly does not.</div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-block">
+        <span class="step-tag">Step 3</span>
+        <h3>Break Down the Key Words</h3>
+        <p class="step-prompt">Identify the key content words. For each: what does it mean, and what should you ask yourself?</p>
+        <div class="reveal-item" data-reveal="8">
+          <div class="kw-row">
+            <div class="kw-term">&ldquo;Rightful guardians&rdquo;</div>
+            <div class="kw-means">Questions of moral legitimacy &mdash; not just who currently holds the remains</div>
+            <div class="kw-ask">Who else could claim guardianship? Does possession equal right?</div>
+          </div>
+        </div>
+        <div class="reveal-item" data-reveal="9">
+          <div class="kw-row">
+            <div class="kw-term">&ldquo;Human remains&rdquo;</div>
+            <div class="kw-means">Not merely objects &mdash; they carry cultural, spiritual, and scientific significance</div>
+            <div class="kw-ask">How does &lsquo;remains&rsquo; vs &lsquo;ancestors&rsquo; change the ethical argument?</div>
+          </div>
+        </div>
+        <div class="reveal-item" data-reveal="10">
+          <div class="kw-row">
+            <div class="kw-term">&ldquo;Ethical debates&rdquo;</div>
+            <div class="kw-means">Engage with moral reasoning, not just historical events</div>
+            <div class="kw-ask">What ethical principles conflict? (knowledge vs dignity, rights vs research)</div>
+          </div>
+        </div>
+        <div class="reveal-item" data-reveal="11">
+          <div class="kw-row">
+            <div class="kw-term">&ldquo;Study, display, repatriation&rdquo;</div>
+            <div class="kw-means">Three distinct issues &mdash; address all three</div>
+            <div class="kw-ask">Do they raise different ethical questions? Which case studies apply?</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="step-block">
+        <span class="step-tag">Step 4</span>
+        <h3>Plan Before You Write</h3>
+        <p class="step-prompt">Before writing, check you can tick off each of these.</p>
+        <div class="reveal-item" data-reveal="12">
+          <div class="check-item">Do I have a clear position? (Partial agree/disagree is fine &mdash; but be decisive)</div>
+        </div>
+        <div class="reveal-item" data-reveal="13">
+          <div class="check-item">Can I name at least two case studies? (e.g. Lake Mungo + Lindow Man)</div>
+        </div>
+        <div class="reveal-item" data-reveal="14">
+          <div class="check-item">Can I cite at least two legal frameworks with dates? (NAGPRA 1990, UNDRIP 2007, ICOM 2017)</div>
+        </div>
+        <div class="reveal-item" data-reveal="15">
+          <div class="check-item">Have I addressed study, display <strong>and</strong> repatriation &mdash; or at least two of the three?</div>
+        </div>
+        <div class="reveal-item" data-reveal="16">
+          <div class="check-item">Does my plan include: Introduction + 3 PEEL paragraphs + Conclusion?</div>
+        </div>
+      </div>
+
+      <div class="reveal-btn-wrap">
+        <button class="reveal-btn" id="revealBtn" onclick="revealNext()">Reveal next <span class="arrow">&rarr;</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SECTION 3: EXEMPLAR -->
+<section id="exemplar">
+  <div class="container">
+    <span class="section-label">Part 3</span>
+    <h2>Annotated Exemplar Response</h2>
+    <p>Toggle features one at a time per paragraph. The <strong>Judgement</strong> button reveals evaluative language throughout &mdash; the words that show the writer is analysing, not just describing.</p>
+
+    <!-- LEGEND -->
+    <div class="legend">
+      <div class="legend-group-label">Introduction &amp; Conclusion</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-position)"></span> Position / Stimulus</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-roadmap)"></span> Roadmap</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-conditional)"></span> Conditional Judgement</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-elevation)"></span> Elevation</div>
+      <div class="legend-group-label">Body Paragraphs (PEEL)</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-point)"></span> P &mdash; Point</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-evidence)"></span> E &mdash; Evidence</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-explain)"></span> E &mdash; Explain</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-link)"></span> L &mdash; Link</div>
+      <div class="legend-group-label">All Paragraphs</div>
+      <div class="legend-item"><span class="legend-chip underline"></span> Judgement Language</div>
+    </div>
+
+    <!-- ==================== INTRODUCTION ==================== -->
+    <div class="para-block">
+      <input type="checkbox" class="toggle-cb" id="intro-position">
+      <input type="checkbox" class="toggle-cb" id="intro-roadmap">
+      <input type="checkbox" class="toggle-cb" id="intro-judge">
+      <input type="checkbox" class="toggle-cb" id="intro-all">
+      <div class="para-block-header">
+        <span class="para-block-title">Introduction</span>
+        <div class="toggle-controls">
+          <label class="toggle-label" for="intro-position"><span class="chip" style="background:var(--chip-position)"></span> Position</label>
+          <label class="toggle-label" for="intro-roadmap"><span class="chip" style="background:var(--chip-roadmap)"></span> Roadmap</label>
+          <label class="toggle-label" for="intro-judge"><span class="chip-line"></span> Judgement</label>
+          <label class="toggle-label" for="intro-all">All</label>
+        </div>
+      </div>
+      <div class="para-block-body">
+        <p><span class="hl-position">The assertion that museums are the rightful guardians of human remains presents a <span class="hl-judge">compelling but ultimately incomplete</span> picture of a complex ethical debate.</span> While museums have historically fulfilled vital roles in preserving and disseminating knowledge about ancient peoples, the growing recognition of Indigenous cultural rights &mdash; and the colonial origins of many collections &mdash; <span class="hl-judge">fundamentally challenges</span> any simple claim to guardianship. <span class="hl-roadmap">A <span class="hl-judge">balanced evaluation must weigh</span> the scientific value of study and display alongside the spiritual obligations, legal frameworks, and human dignity of descendant communities.</span></p>
+      </div>
+    </div>
+
+    <div class="teacher-prompt">
+      <strong>Teaching moment:</strong> Walk students through the introduction. Show how the Position signals a nuanced stance without saying &ldquo;I agree/disagree.&rdquo; Show how the Roadmap previews the three areas. Then toggle Judgement to reveal the evaluative verbs and phrases that do the analytical heavy lifting.
+    </div>
+
+    <!-- ==================== PARAGRAPH 1 ==================== -->
+    <div class="para-block">
+      <input type="checkbox" class="toggle-cb" id="p1-point">
+      <input type="checkbox" class="toggle-cb" id="p1-evidence">
+      <input type="checkbox" class="toggle-cb" id="p1-explain">
+      <input type="checkbox" class="toggle-cb" id="p1-link">
+      <input type="checkbox" class="toggle-cb" id="p1-judge">
+      <input type="checkbox" class="toggle-cb" id="p1-all">
+      <div class="para-block-header">
+        <span class="para-block-title">Paragraph 1 &mdash; The Case for Museums</span>
+        <div class="toggle-controls">
+          <label class="toggle-label" for="p1-point"><span class="chip" style="background:var(--chip-point)"></span> P</label>
+          <label class="toggle-label" for="p1-evidence"><span class="chip" style="background:var(--chip-evidence)"></span> E</label>
+          <label class="toggle-label" for="p1-explain"><span class="chip" style="background:var(--chip-explain)"></span> E</label>
+          <label class="toggle-label" for="p1-link"><span class="chip" style="background:var(--chip-link)"></span> L</label>
+          <label class="toggle-label" for="p1-judge"><span class="chip-line"></span> J</label>
+          <label class="toggle-label" for="p1-all">All</label>
+        </div>
+      </div>
+      <div class="para-block-body">
+        <p><span class="hl-point">Museums provide <span class="hl-judge">irreplaceable</span> conditions for the preservation, study, and public education of human remains.</span> <span class="hl-evidence">The case of Lindow Man, an Iron Age bog body discovered in 1984 in Cheshire and now held at the British Museum, demonstrates how institutional custody can enable ongoing scientific inquiry. With no identifiable descendant community making claims for return, the British Museum has employed DNA analysis, isotope studies, and CT scanning to reveal significant information about Iron Age Britain, presenting remains within full cultural and scientific context for public education.</span> <span class="hl-explain">This illustrates how, in the absence of direct descendant communities, museum custody serves a <span class="hl-judge">legitimate guardianship function</span> &mdash; protecting remains from deterioration, enabling continued research, and fulfilling the educational mission central to the institution&rsquo;s purpose.</span> <span class="hl-link">In this context, the museum&rsquo;s claim to guardianship is <span class="hl-judge">defensible</span>, as the interests of historical knowledge serve broad public benefit with no identifiable party harmed by the arrangement.</span></p>
+      </div>
+    </div>
+
+    <div class="teacher-prompt">
+      <strong>Guided practice:</strong> Before revealing Paragraph 2, students work in pairs to identify P, E, E, L boundaries <em>and</em> circle any words that show judgement. Reveal to check.
+    </div>
+
+    <!-- ==================== PARAGRAPH 2 ==================== -->
+    <div class="para-block">
+      <input type="checkbox" class="toggle-cb" id="p2-point">
+      <input type="checkbox" class="toggle-cb" id="p2-evidence">
+      <input type="checkbox" class="toggle-cb" id="p2-explain">
+      <input type="checkbox" class="toggle-cb" id="p2-link">
+      <input type="checkbox" class="toggle-cb" id="p2-judge">
+      <input type="checkbox" class="toggle-cb" id="p2-all">
+      <div class="para-block-header">
+        <span class="para-block-title">Paragraph 2 &mdash; Challenging the Claim</span>
+        <div class="toggle-controls">
+          <label class="toggle-label" for="p2-point"><span class="chip" style="background:var(--chip-point)"></span> P</label>
+          <label class="toggle-label" for="p2-evidence"><span class="chip" style="background:var(--chip-evidence)"></span> E</label>
+          <label class="toggle-label" for="p2-explain"><span class="chip" style="background:var(--chip-explain)"></span> E</label>
+          <label class="toggle-label" for="p2-link"><span class="chip" style="background:var(--chip-link)"></span> L</label>
+          <label class="toggle-label" for="p2-judge"><span class="chip-line"></span> J</label>
+          <label class="toggle-label" for="p2-all">All</label>
+        </div>
+      </div>
+      <div class="para-block-body">
+        <p><span class="hl-point">However, the colonial origins of many museum collections <span class="hl-judge">fundamentally undermine</span> the <span class="hl-judge">moral legitimacy</span> of institutions claiming the role of rightful guardian.</span> <span class="hl-evidence">The repatriation of Mungo Lady (LM1) and Mungo Man (LM3) to the Paakantji, Ngyiampaa, and Mutthi Mutthi peoples illustrates what is at stake when institutional custody overrides community rights. Removed from Country without consent, these remains were held for decades in storage before Aboriginal campaigns secured their return to NSW National Parks and Wildlife Service custody in 1992, followed by formal reburial in 2017. The Traditional Custodians&rsquo; declaration &mdash; &ldquo;Our ancestor is home&rdquo; &mdash; powerfully articulates what decades of institutional custody had denied: the spiritual obligation of living communities to care for their dead.</span> <span class="hl-explain">This case exposes a critical distinction: the ability to preserve and study human remains <span class="hl-judge">does not confer the right</span> to do so. When remains were removed without consent as part of broader colonial dispossession, any claim to &ldquo;rightful&rdquo; guardianship is <span class="hl-judge">morally untenable</span>, regardless of the scientific value produced.</span> <span class="hl-link">Lake Mungo thus <span class="hl-judge">directly refutes</span> the central premise of the statement &mdash; <span class="hl-judge">capability does not confer legitimacy</span>, and the experiences of descendant communities cannot be subordinated to the interests of scientific knowledge.</span></p>
+      </div>
+    </div>
+
+    <div class="teacher-prompt">
+      <strong>Independent practice:</strong> Students work individually on Paragraph 3. Identify each PEEL section <em>and</em> underline every word or phrase that shows judgement. Reveal when ready.
+    </div>
+
+    <!-- ==================== PARAGRAPH 3 ==================== -->
+    <div class="para-block">
+      <input type="checkbox" class="toggle-cb" id="p3-point">
+      <input type="checkbox" class="toggle-cb" id="p3-evidence">
+      <input type="checkbox" class="toggle-cb" id="p3-explain">
+      <input type="checkbox" class="toggle-cb" id="p3-link">
+      <input type="checkbox" class="toggle-cb" id="p3-judge">
+      <input type="checkbox" class="toggle-cb" id="p3-all">
+      <div class="para-block-header">
+        <span class="para-block-title">Paragraph 3 &mdash; Legal &amp; Ethical Frameworks</span>
+        <div class="toggle-controls">
+          <label class="toggle-label" for="p3-point"><span class="chip" style="background:var(--chip-point)"></span> P</label>
+          <label class="toggle-label" for="p3-evidence"><span class="chip" style="background:var(--chip-evidence)"></span> E</label>
+          <label class="toggle-label" for="p3-explain"><span class="chip" style="background:var(--chip-explain)"></span> E</label>
+          <label class="toggle-label" for="p3-link"><span class="chip" style="background:var(--chip-link)"></span> L</label>
+          <label class="toggle-label" for="p3-judge"><span class="chip-line"></span> J</label>
+          <label class="toggle-label" for="p3-all">All</label>
+        </div>
+      </div>
+      <div class="para-block-body">
+        <p><span class="hl-point">The evolution of international and national legal frameworks over the past half-century reflects a <span class="hl-judge">growing consensus</span> that museums <span class="hl-judge">cannot assume automatic rights</span> to the custody of human remains.</span> <span class="hl-evidence">The 1990 Native American Graves Protection and Repatriation Act (NAGPRA) legally compelled US museums and federal agencies to return Native American remains and sacred objects to descendant communities. The 2007 UN Declaration on the Rights of Indigenous Peoples (UNDRIP), Article 12, formally recognised the right of Indigenous peoples to the repatriation of their human remains and cultural property. The ICOM Code of Ethics (2017) further required museums to respond with sensitivity to repatriation requests, giving genuine weight to the interests of originating communities.</span> <span class="hl-explain">These frameworks do not reject museums as institutions, nor deny the value of scientific inquiry. Rather, they <span class="hl-judge">qualify museum authority</span> &mdash; establishing that guardianship must be exercised in partnership with, not in spite of, descendant communities.</span> <span class="hl-link">Collectively, they represent a <span class="hl-judge">paradigm shift</span>: from museums as unquestioned custodians of the past to stakeholders whose claims must be weighed alongside &mdash; and sometimes yielded to &mdash; the rights of living peoples.</span></p>
+      </div>
+    </div>
+
+    <!-- ==================== CONCLUSION ==================== -->
+    <div class="para-block">
+      <input type="checkbox" class="toggle-cb" id="conc-stimulus">
+      <input type="checkbox" class="toggle-cb" id="conc-conditional">
+      <input type="checkbox" class="toggle-cb" id="conc-elevation">
+      <input type="checkbox" class="toggle-cb" id="conc-judge">
+      <input type="checkbox" class="toggle-cb" id="conc-all">
+      <div class="para-block-header">
+        <span class="para-block-title">Conclusion</span>
+        <div class="toggle-controls">
+          <label class="toggle-label" for="conc-stimulus"><span class="chip" style="background:var(--chip-stimulus)"></span> Stimulus</label>
+          <label class="toggle-label" for="conc-conditional"><span class="chip" style="background:var(--chip-conditional)"></span> Conditional</label>
+          <label class="toggle-label" for="conc-elevation"><span class="chip" style="background:var(--chip-elevation)"></span> Elevation</label>
+          <label class="toggle-label" for="conc-judge"><span class="chip-line"></span> Judgement</label>
+          <label class="toggle-label" for="conc-all">All</label>
+        </div>
+      </div>
+      <div class="para-block-body">
+        <p><span class="hl-stimulus">Ultimately, the assertion that museums are the rightful guardians of human remains is <span class="hl-judge">too absolute to withstand rigorous ethical scrutiny</span>.</span> <span class="hl-conditional">Where no identifiable descendant community exists and display serves a genuine educational purpose, institutional custody may be <span class="hl-judge">defensible</span>. However, where living communities maintain spiritual, cultural, and legal rights to their ancestors &mdash; particularly where removal was non-consensual and colonial in nature &mdash; the museum&rsquo;s claim to rightful guardianship <span class="hl-judge">fails on both moral and legal grounds</span>.</span> <span class="hl-elevation">A just approach demands ongoing dialogue guided by principles of consent, dignity, and cultural respect. The question is not simply who owns the past, but who has the right to determine how it is honoured.</span></p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SECTION 4: FEATURE GUIDE -->
+<section id="features">
+  <div class="container">
+    <span class="section-label">Part 4</span>
+    <h2>Feature Guide</h2>
+    <p>What each feature does, where it appears, and how to use it in your own writing.</p>
+
+    <div class="annotation-block">
+
+      <!-- POSITION -->
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-position);">
+          <span class="legend-chip" style="background:var(--chip-position)"></span> Position (Introduction)
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> States your responding judgement in the very first sentence. It signals your stance on the stimulus without saying &ldquo;I agree&rdquo; or &ldquo;I disagree.&rdquo;</p>
+          <blockquote>&ldquo;&hellip;presents a compelling but ultimately incomplete picture&hellip;&rdquo;</blockquote>
+          <p>This is a nuanced position &mdash; it acknowledges the stimulus has merit while flagging its limitations. Markers reward this immediately.</p>
+          <div class="tip"><strong>Tip:</strong> Write your position as a single sentence that a reader could understand without the rest of the essay. If it&rsquo;s vague, it&rsquo;s not a position.</div>
+        </div>
+      </article>
+
+      <!-- ROADMAP -->
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-roadmap);">
+          <span class="legend-chip" style="background:var(--chip-roadmap)"></span> Roadmap (Introduction)
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> Previews the 2&ndash;3 areas your response will address. Shows the marker your essay is planned, not improvised.</p>
+          <blockquote>&ldquo;A balanced evaluation must weigh the scientific value&hellip; alongside the spiritual obligations, legal frameworks, and human dignity&hellip;&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> Your roadmap should map directly to your body paragraphs. If your roadmap says three things, you need three paragraphs.</div>
+        </div>
+      </article>
+
+      <!-- PEEL: POINT -->
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-point);">
+          <span class="legend-chip" style="background:var(--chip-point)"></span> P &mdash; Point
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> One sentence stating the paragraph&rsquo;s argument. No evidence &mdash; just commit to a claim.</p>
+          <blockquote>&ldquo;Museums provide irreplaceable conditions&hellip;&rdquo;</blockquote>
+          <blockquote>&ldquo;However, the colonial origins&hellip; fundamentally undermine the moral legitimacy&hellip;&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> Write all your Points first. If they read like a mini-essay, your structure is solid.</div>
+        </div>
+      </article>
+
+      <!-- PEEL: EVIDENCE -->
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-evidence);">
+          <span class="legend-chip" style="background:var(--chip-evidence)"></span> E &mdash; Evidence
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> Specific case studies, dates, legal frameworks, or primary source quotations.</p>
+          <blockquote>&ldquo;Lindow Man&hellip; 1984&hellip; DNA analysis, isotope studies, CT scanning&hellip;&rdquo;</blockquote>
+          <blockquote>&ldquo;NAGPRA (1990)&hellip; UNDRIP Article 12 (2007)&hellip; ICOM (2017)&hellip;&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> 2+ case studies and 2+ legal frameworks. Present chronologically to show evolution.</div>
+        </div>
+      </article>
+
+      <!-- PEEL: EXPLAIN -->
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-explain);">
+          <span class="legend-chip" style="background:var(--chip-explain)"></span> E &mdash; Explain
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> Interprets evidence. No new info &mdash; explains <strong>why</strong> it supports the Point.</p>
+          <blockquote>&ldquo;&hellip;the ability to preserve and study human remains does not confer the right to do so.&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> After evidence, ask: &ldquo;So what? Why does this matter?&rdquo; That answer is your Explain.</div>
+        </div>
+      </article>
+
+      <!-- PEEL: LINK -->
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-link);">
+          <span class="legend-chip" style="background:var(--chip-link)"></span> L &mdash; Link
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> Returns to the question&rsquo;s language and advances the argument. Not a restatement &mdash; a progression.</p>
+          <blockquote>&ldquo;&hellip;capability does not confer legitimacy&hellip;&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> Use exact words from the question. Qualify your claim to set up the next paragraph.</div>
+        </div>
+      </article>
+
+      <!-- CONCLUSION: CONDITIONAL -->
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-conditional);">
+          <span class="legend-chip" style="background:var(--chip-conditional)"></span> Conditional Judgement (Conclusion)
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> Delivers your final position using &ldquo;where&hellip; / however, where&hellip;&rdquo; to show that the answer depends on context. This is genuine evaluation.</p>
+          <blockquote>&ldquo;Where no identifiable descendant community exists&hellip; institutional custody may be defensible. However, where living communities maintain&hellip; rights&hellip;&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> A conditional judgement is stronger than an absolute one. It shows you can distinguish between situations.</div>
+        </div>
+      </article>
+
+      <!-- CONCLUSION: ELEVATION -->
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-elevation);">
+          <span class="legend-chip" style="background:var(--chip-elevation)"></span> Elevation (Conclusion)
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> Moves beyond the specific question to a broader ethical or historical reflection. This is what separates a very good response from an exceptional one.</p>
+          <blockquote>&ldquo;The question is not simply who owns the past, but who has the right to determine how it is honoured.&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> Your final sentence should make the reader think beyond the essay. Aim for one sentence of genuine insight.</div>
+        </div>
+      </article>
+
+      <!-- JUDGEMENT LANGUAGE -->
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:#FFF7ED; border-bottom: 1px solid #FDBA74;">
+          <span class="legend-chip" style="background:var(--chip-judge)"></span> Judgement Language
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> These are the words and phrases that transform description into evaluation. They show the marker you are making judgements, not just retelling events.</p>
+          <blockquote>&ldquo;compelling but ultimately incomplete&rdquo; &middot; &ldquo;fundamentally undermine&rdquo; &middot; &ldquo;morally untenable&rdquo; &middot; &ldquo;does not confer the right&rdquo; &middot; &ldquo;paradigm shift&rdquo; &middot; &ldquo;defensible&rdquo;</blockquote>
+          <p>Notice how every paragraph contains judgement language &mdash; it&rsquo;s not saved for the conclusion. Evaluation runs throughout.</p>
+          <div class="tip"><strong>Tip:</strong> Build a personal bank of evaluative phrases. Practise inserting them into topic sentences, explain sentences, and links &mdash; not just conclusions.</div>
+        </div>
+      </article>
+
+    </div>
+
+    <h3 style="margin-top: 2.5rem;">Quick-Reference Writing Tips</h3>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <h4>Language Precision</h4>
+        <ul>
+          <li>&ldquo;Moral legitimacy&rdquo; beats &ldquo;right&rdquo;</li>
+          <li>&ldquo;Fundamentally challenges&rdquo; beats &ldquo;goes against&rdquo;</li>
+          <li>&ldquo;Paradigm shift&rdquo; captures scale better than &ldquo;change&rdquo;</li>
+          <li>&ldquo;Colonial dispossession&rdquo; shows broad historical understanding</li>
+        </ul>
+      </div>
+      <div class="tip-card">
+        <h4>Evaluative Moves</h4>
+        <ul>
+          <li>Capability &ne; right (the core distinction)</li>
+          <li>&ldquo;Where&hellip; / however, where&hellip;&rdquo; for conditional judgement</li>
+          <li>Qualify &mdash; don&rsquo;t generalise. &ldquo;In this context&rdquo; beats &ldquo;always&rdquo;</li>
+          <li>End with broader ethical reflection, not a summary</li>
+        </ul>
+      </div>
+      <div class="tip-card">
+        <h4>Evidence Standards</h4>
+        <ul>
+          <li>Name case study, date, and location every time</li>
+          <li>Cite specific articles (e.g. &ldquo;UNDRIP, Article 12&rdquo;)</li>
+          <li>One primary source quote per paragraph maximum</li>
+          <li>Present frameworks chronologically to show change</li>
+        </ul>
+      </div>
+      <div class="tip-card">
+        <h4>Structure Essentials</h4>
+        <ul>
+          <li>Introduction: position + roadmap (never &ldquo;I agree/disagree&rdquo;)</li>
+          <li>Body: 3 &times; PEEL, sequenced to build argument</li>
+          <li>Conclusion: stimulus + conditional judgement + elevation</li>
+          <li>Judgement language in <em>every</em> paragraph, not just the conclusion</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Ancient History &mdash; Extended Response Writing Guide &middot; For classroom use</p>
+</footer>
+
+<script>
+(function() {
+  var total = 16, current = 0, btn = document.getElementById('revealBtn');
+  window.revealNext = function() {
+    if (current >= total) return;
+    current++;
+    document.querySelectorAll('[data-reveal="' + current + '"]').forEach(function(el) {
+      el.classList.add('revealed');
+    });
+    var items = document.querySelectorAll('[data-reveal="' + current + '"]');
+    if (items.length) setTimeout(function() { items[items.length - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+    var remaining = total - current;
+    btn.innerHTML = remaining > 0
+      ? 'Reveal next (' + remaining + ' remaining) <span class="arrow">&rarr;</span>'
+      : 'All revealed &#10003;';
+    if (!remaining) btn.classList.add('done');
+  };
+})();
+</script>
+
+</body>
+</html>
