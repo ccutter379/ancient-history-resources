@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treatment and Display of Human Remains — Extended Response</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --font-display: 'Libre Baskerville', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --bg: #FFFFFF;
+    --bg-soft: #f4efe5;
+    --bg-dark: #1e1610;
+    --accent: #f9d6af;
+    --accent-strong: #ff9764;
+    --accent-bg: #fff8f0;
+    --text: #1e1610;
+    --text-light: #8a7d6b;
+    --text-on-dark: #f4efe5;
+    --border: #e5ddd1;
+    --radius: 12px;
+    --sidebar-width: 240px;
+
+    --color-point: #c7deff;
+    --color-evidence: #fce4be;
+    --color-explain: #cef5c0;
+    --color-link: #f3dcfb;
+    --chip-point: #5b9bd5;
+    --chip-evidence: #ff9764;
+    --chip-explain: #6bc48d;
+    --chip-link: #b07cc8;
+    --color-position: #fce4be;
+    --color-roadmap: #c7deff;
+    --color-stimulus: #fce4be;
+    --color-conditional: #cef5c0;
+    --color-elevation: #f3dcfb;
+    --chip-position: #ff9764;
+    --chip-roadmap: #5b9bd5;
+    --chip-stimulus: #ff9764;
+    --chip-conditional: #6bc48d;
+    --chip-elevation: #b07cc8;
+    --chip-judge: #e8743a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 17px; height: 100%; }
+  body {
+    font-family: var(--font-body); color: var(--text);
+    background: var(--bg-dark); line-height: 1.7; -webkit-font-smoothing: antialiased;
+    height: 100%; overflow: hidden; display: flex;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-width); min-width: var(--sidebar-width);
+    background: #1e1610; border-right: 1px solid #3a2e22;
+    display: flex; flex-direction: column; height: 100vh;
+    padding: 1.5rem 0;
+  }
+  .sidebar-label {
+    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent-strong);
+    padding: 0 1.25rem; margin-bottom: 1rem;
+  }
+  .sidebar-nav { list-style: none; flex: 1; overflow-y: auto; }
+  .sidebar-nav li { margin: 0; }
+  .sidebar-nav button {
+    display: flex; align-items: center; gap: 0.75rem;
+    width: 100%; padding: 0.7rem 1.25rem; border: none; background: none;
+    font-family: var(--font-body); font-size: 0.82rem; font-weight: 500;
+    color: #888; cursor: pointer; text-align: left; transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .sidebar-nav button:hover { color: #d4c4a8; background: rgba(249,214,175,0.06); }
+  .sidebar-nav button.active {
+    color: var(--accent); background: rgba(249,214,175,0.1);
+    border-left-color: var(--accent-strong); font-weight: 700;
+  }
+  .sidebar-nav .nav-num {
+    font-size: 0.7rem; font-weight: 700; color: inherit; opacity: 0.5;
+    width: 1.4em; text-align: right; flex-shrink: 0;
+  }
+  .sidebar-nav button.active .nav-num { opacity: 1; color: var(--accent-strong); }
+  .sidebar-footer {
+    padding: 1rem 1.25rem; font-size: 0.65rem; color: #555;
+    border-top: 1px solid #3a2e22; margin-top: auto;
+  }
+
+  /* ── MAIN PANEL ── */
+  .main-panel {
+    flex: 1; height: 100vh; overflow-y: auto;
+    background: var(--bg); position: relative;
+  }
+  .panel {
+    display: none; min-height: 100vh;
+    padding: 1.75rem 3.5rem 4rem;
+    max-width: 960px;
+  }
+  .panel.active { display: block; }
+
+  /* ── TYPOGRAPHY ── */
+  h2 {
+    font-family: var(--font-display); font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 400; line-height: 1.2; margin-bottom: 0.5rem;
+  }
+  h3 { font-family: var(--font-body); font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem; }
+  p { margin-bottom: 1rem; }
+  .section-label {
+    display: inline-block; font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-strong);
+    background: var(--accent-bg); padding: 0.35em 1em; border-radius: 100px; margin-bottom: 0.5rem;
+  }
+
+  /* ── HERO (Overview panel) ── */
+  .hero-panel { background: var(--accent); min-height: auto; display: flex; align-items: flex-start; padding: 2rem 2.5rem; }
+  .hero-inner { max-width: 700px; }
+  .hero-label {
+    display: inline-block; font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--text);
+    background: rgba(255,255,255,0.5); padding: 0.35em 1em; border-radius: 100px; margin-bottom: 0.75rem;
+  }
+  .hero-panel h1 {
+    font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 400; line-height: 1.2; margin-bottom: 0.4rem; color: var(--text);
+  }
+  .hero-subtitle {
+    font-family: var(--font-body); font-size: clamp(0.85rem, 1.6vw, 0.95rem);
+    font-weight: 600; letter-spacing: 0.02em; color: var(--text); opacity: 0.65;
+    max-width: 550px; margin-bottom: 0.3rem;
+  }
+  .hero-panel p { font-size: 0.92rem; color: var(--text); opacity: 0.7; max-width: 550px; line-height: 1.5; }
+
+  /* ── LISC TABLE ── */
+  .lisc-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    border-radius: var(--radius); overflow: hidden;
+    border: 1px solid var(--border); margin: 1.5rem 0 0;
+  }
+  .lisc-table th, .lisc-table td {
+    text-align: left; padding: 1rem 1.5rem; vertical-align: top;
+    font-size: 0.92rem; line-height: 1.6;
+  }
+  .lisc-table thead th {
+    background: var(--bg-dark); color: var(--text-on-dark);
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .lisc-table thead th:first-child { width: 38%; }
+  .lisc-table tbody td { background: var(--bg); border-bottom: 1px solid var(--border); }
+  .lisc-table tbody tr:last-child td { border-bottom: none; }
+  .lisc-table tbody td:first-child {
+    background: var(--bg-soft); font-weight: 600; border-right: 1px solid var(--border);
+  }
+  .lisc-table ul { padding-left: 1.2rem; margin: 0; }
+  .lisc-table li { margin-bottom: 0.35rem; }
+  .lisc-table li:last-child { margin-bottom: 0; }
+
+  /* ── QUESTION BOX ── */
+  .question-box {
+    background: var(--bg-dark); color: var(--text-on-dark);
+    padding: 2.5rem 3rem; border-radius: var(--radius);
+    margin: 2rem 0; font-family: var(--font-display); font-size: 1.25rem; line-height: 1.55;
+  }
+  .question-box .marks {
+    display: block; font-family: var(--font-body); font-size: 0.75rem;
+    color: var(--text-light); margin-top: 1rem; letter-spacing: 0.04em;
+    text-transform: uppercase; font-weight: 600;
+  }
+
+  /* ── DECONSTRUCTION STEPS ── */
+  .step-block {
+    background: var(--bg-soft); border-radius: var(--radius);
+    padding: 2rem 2.5rem; margin-bottom: 1.25rem;
+  }
+  .step-block .step-tag {
+    display: inline-block; font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-strong); margin-bottom: 0.5rem;
+  }
+  .step-block p.step-prompt { font-size: 0.95rem; color: var(--text-light); margin-bottom: 0; }
+  .reveal-item {
+    opacity: 0; max-height: 0; overflow: hidden;
+    transition: opacity 0.4s ease, max-height 0.5s ease, margin 0.4s ease;
+    margin-top: 0;
+  }
+  .reveal-item.revealed { opacity: 1; max-height: 600px; margin-top: 0.75rem; }
+  .reveal-answer {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem 1.25rem; font-size: 0.95rem; line-height: 1.6;
+  }
+  .reveal-answer.highlight { background: var(--accent-bg); border-color: var(--accent); }
+  .reveal-answer .label-sm {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent-strong); display: block; margin-bottom: 0.3rem;
+  }
+  .kw-row {
+    display: grid; grid-template-columns: 1fr 1.4fr 1.4fr; gap: 0.75rem;
+    padding: 1rem 1.25rem; background: var(--bg); border: 1px solid var(--border);
+    border-radius: 8px; font-size: 0.9rem; line-height: 1.55;
+  }
+  .kw-row .kw-term { font-weight: 700; }
+  .kw-row .kw-ask { color: var(--text-light); font-style: italic; }
+  .check-item {
+    padding: 0.8rem 1.25rem 0.8rem 2.8rem; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem; position: relative;
+  }
+  .check-item::before {
+    content: ''; position: absolute; left: 1.1rem; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; border-radius: 4px; border: 2px solid var(--border);
+  }
+  .reveal-btn-wrap {
+    position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: none;
+  }
+  .reveal-btn-wrap.visible { display: block; }
+  .reveal-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.85rem 2rem; font-size: 0.88rem; font-weight: 700; font-family: var(--font-body);
+    color: var(--text-on-dark); background: var(--bg-dark); border: none; border-radius: 100px;
+    cursor: pointer; box-shadow: 0 4px 24px rgba(0,0,0,0.18); transition: all 0.2s;
+  }
+  .reveal-btn:hover { background: #2e2218; transform: translateY(-1px); }
+  .reveal-btn.done { background: var(--accent-strong); color: #fff; cursor: default; }
+
+  /* ── EXEMPLAR TOGGLES ── */
+  .toggle-cb { display: none; }
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin: 1rem 0; padding: 1.1rem 1.25rem;
+    background: var(--bg-soft); border-radius: var(--radius); font-size: 0.75rem; font-weight: 600;
+  }
+  .legend-group-label {
+    width: 100%; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-light); margin-top: 0.3rem;
+  }
+  .legend-group-label:first-child { margin-top: 0; }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+  .legend-chip { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+  .legend-chip.underline { width: 18px; height: 3px; border-radius: 2px; background: var(--chip-judge); }
+
+  .para-block {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); margin: 1.25rem 0; overflow: hidden;
+  }
+  .para-block-header {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
+    padding: 0.9rem 1.5rem; background: var(--bg-soft); border-bottom: 1px solid var(--border);
+  }
+  .para-block-title { font-weight: 700; font-size: 0.85rem; color: var(--text); }
+  .toggle-controls { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .toggle-label {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.35rem 0.75rem; font-size: 0.72rem; font-weight: 700;
+    border-radius: 100px; cursor: pointer; border: 1.5px solid var(--border);
+    background: var(--bg); transition: all 0.2s; user-select: none;
+  }
+  .toggle-label:hover { border-color: #999; }
+  .toggle-label .chip { width: 8px; height: 8px; border-radius: 2px; }
+  .toggle-label .chip-line { width: 12px; height: 2.5px; border-radius: 2px; background: var(--chip-judge); }
+  .para-block-body { padding: 2rem 2rem; font-size: 1rem; line-height: 1.85; }
+
+  .hl-point, .hl-evidence, .hl-explain, .hl-link,
+  .hl-position, .hl-roadmap,
+  .hl-stimulus, .hl-conditional, .hl-elevation {
+    border-radius: 4px; padding: 0.1em 0.15em; transition: background 0.35s;
+  }
+  .hl-judge {
+    transition: all 0.35s; text-decoration-line: underline;
+    text-decoration-color: transparent; text-decoration-thickness: 2.5px;
+    text-underline-offset: 4px; text-decoration-style: wavy;
+  }
+
+  /* Introduction toggles */
+  #intro-position:checked ~ .para-block-body .hl-position { background: var(--color-position); }
+  #intro-roadmap:checked ~ .para-block-body .hl-roadmap { background: var(--color-roadmap); }
+  #intro-judge:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #intro-all:checked ~ .para-block-body .hl-position { background: var(--color-position); }
+  #intro-all:checked ~ .para-block-body .hl-roadmap { background: var(--color-roadmap); }
+  #intro-all:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #intro-position:checked ~ .para-block-header .toggle-label[for="intro-position"] { border-color: var(--chip-position); background: var(--chip-position); color: #fff; }
+  #intro-roadmap:checked ~ .para-block-header .toggle-label[for="intro-roadmap"] { border-color: var(--chip-roadmap); background: var(--chip-roadmap); color: #fff; }
+  #intro-judge:checked ~ .para-block-header .toggle-label[for="intro-judge"] { border-color: var(--chip-judge); background: var(--chip-judge); color: #fff; }
+  #intro-all:checked ~ .para-block-header .toggle-label[for="intro-all"] { border-color: var(--bg-dark); background: var(--bg-dark); color: #fff; }
+
+  /* Paragraph 1 toggles */
+  #p1-point:checked ~ .para-block-body .hl-point { background: var(--color-point); }
+  #p1-evidence:checked ~ .para-block-body .hl-evidence { background: var(--color-evidence); }
+  #p1-explain:checked ~ .para-block-body .hl-explain { background: var(--color-explain); }
+  #p1-link:checked ~ .para-block-body .hl-link { background: var(--color-link); }
+  #p1-judge:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #p1-all:checked ~ .para-block-body .hl-point { background: var(--color-point); }
+  #p1-all:checked ~ .para-block-body .hl-evidence { background: var(--color-evidence); }
+  #p1-all:checked ~ .para-block-body .hl-explain { background: var(--color-explain); }
+  #p1-all:checked ~ .para-block-body .hl-link { background: var(--color-link); }
+  #p1-all:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #p1-point:checked ~ .para-block-header .toggle-label[for="p1-point"] { border-color: var(--chip-point); background: var(--chip-point); color: #fff; }
+  #p1-evidence:checked ~ .para-block-header .toggle-label[for="p1-evidence"] { border-color: var(--chip-evidence); background: var(--chip-evidence); color: #fff; }
+  #p1-explain:checked ~ .para-block-header .toggle-label[for="p1-explain"] { border-color: var(--chip-explain); background: var(--chip-explain); color: #fff; }
+  #p1-link:checked ~ .para-block-header .toggle-label[for="p1-link"] { border-color: var(--chip-link); background: var(--chip-link); color: #fff; }
+  #p1-judge:checked ~ .para-block-header .toggle-label[for="p1-judge"] { border-color: var(--chip-judge); background: var(--chip-judge); color: #fff; }
+  #p1-all:checked ~ .para-block-header .toggle-label[for="p1-all"] { border-color: var(--bg-dark); background: var(--bg-dark); color: #fff; }
+
+  /* Paragraph 2 toggles */
+  #p2-point:checked ~ .para-block-body .hl-point { background: var(--color-point); }
+  #p2-evidence:checked ~ .para-block-body .hl-evidence { background: var(--color-evidence); }
+  #p2-explain:checked ~ .para-block-body .hl-explain { background: var(--color-explain); }
+  #p2-link:checked ~ .para-block-body .hl-link { background: var(--color-link); }
+  #p2-judge:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #p2-all:checked ~ .para-block-body .hl-point { background: var(--color-point); }
+  #p2-all:checked ~ .para-block-body .hl-evidence { background: var(--color-evidence); }
+  #p2-all:checked ~ .para-block-body .hl-explain { background: var(--color-explain); }
+  #p2-all:checked ~ .para-block-body .hl-link { background: var(--color-link); }
+  #p2-all:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #p2-point:checked ~ .para-block-header .toggle-label[for="p2-point"] { border-color: var(--chip-point); background: var(--chip-point); color: #fff; }
+  #p2-evidence:checked ~ .para-block-header .toggle-label[for="p2-evidence"] { border-color: var(--chip-evidence); background: var(--chip-evidence); color: #fff; }
+  #p2-explain:checked ~ .para-block-header .toggle-label[for="p2-explain"] { border-color: var(--chip-explain); background: var(--chip-explain); color: #fff; }
+  #p2-link:checked ~ .para-block-header .toggle-label[for="p2-link"] { border-color: var(--chip-link); background: var(--chip-link); color: #fff; }
+  #p2-judge:checked ~ .para-block-header .toggle-label[for="p2-judge"] { border-color: var(--chip-judge); background: var(--chip-judge); color: #fff; }
+  #p2-all:checked ~ .para-block-header .toggle-label[for="p2-all"] { border-color: var(--bg-dark); background: var(--bg-dark); color: #fff; }
+
+  /* Paragraph 3 toggles */
+  #p3-point:checked ~ .para-block-body .hl-point { background: var(--color-point); }
+  #p3-evidence:checked ~ .para-block-body .hl-evidence { background: var(--color-evidence); }
+  #p3-explain:checked ~ .para-block-body .hl-explain { background: var(--color-explain); }
+  #p3-link:checked ~ .para-block-body .hl-link { background: var(--color-link); }
+  #p3-judge:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #p3-all:checked ~ .para-block-body .hl-point { background: var(--color-point); }
+  #p3-all:checked ~ .para-block-body .hl-evidence { background: var(--color-evidence); }
+  #p3-all:checked ~ .para-block-body .hl-explain { background: var(--color-explain); }
+  #p3-all:checked ~ .para-block-body .hl-link { background: var(--color-link); }
+  #p3-all:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #p3-point:checked ~ .para-block-header .toggle-label[for="p3-point"] { border-color: var(--chip-point); background: var(--chip-point); color: #fff; }
+  #p3-evidence:checked ~ .para-block-header .toggle-label[for="p3-evidence"] { border-color: var(--chip-evidence); background: var(--chip-evidence); color: #fff; }
+  #p3-explain:checked ~ .para-block-header .toggle-label[for="p3-explain"] { border-color: var(--chip-explain); background: var(--chip-explain); color: #fff; }
+  #p3-link:checked ~ .para-block-header .toggle-label[for="p3-link"] { border-color: var(--chip-link); background: var(--chip-link); color: #fff; }
+  #p3-judge:checked ~ .para-block-header .toggle-label[for="p3-judge"] { border-color: var(--chip-judge); background: var(--chip-judge); color: #fff; }
+  #p3-all:checked ~ .para-block-header .toggle-label[for="p3-all"] { border-color: var(--bg-dark); background: var(--bg-dark); color: #fff; }
+
+  /* Conclusion toggles */
+  #conc-stimulus:checked ~ .para-block-body .hl-stimulus { background: var(--color-stimulus); }
+  #conc-conditional:checked ~ .para-block-body .hl-conditional { background: var(--color-conditional); }
+  #conc-elevation:checked ~ .para-block-body .hl-elevation { background: var(--color-elevation); }
+  #conc-judge:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #conc-all:checked ~ .para-block-body .hl-stimulus { background: var(--color-stimulus); }
+  #conc-all:checked ~ .para-block-body .hl-conditional { background: var(--color-conditional); }
+  #conc-all:checked ~ .para-block-body .hl-elevation { background: var(--color-elevation); }
+  #conc-all:checked ~ .para-block-body .hl-judge { text-decoration-color: var(--chip-judge); }
+  #conc-stimulus:checked ~ .para-block-header .toggle-label[for="conc-stimulus"] { border-color: var(--chip-stimulus); background: var(--chip-stimulus); color: #fff; }
+  #conc-conditional:checked ~ .para-block-header .toggle-label[for="conc-conditional"] { border-color: var(--chip-conditional); background: var(--chip-conditional); color: #fff; }
+  #conc-elevation:checked ~ .para-block-header .toggle-label[for="conc-elevation"] { border-color: var(--chip-elevation); background: var(--chip-elevation); color: #fff; }
+  #conc-judge:checked ~ .para-block-header .toggle-label[for="conc-judge"] { border-color: var(--chip-judge); background: var(--chip-judge); color: #fff; }
+  #conc-all:checked ~ .para-block-header .toggle-label[for="conc-all"] { border-color: var(--bg-dark); background: var(--bg-dark); color: #fff; }
+
+  /* Teacher prompt */
+  .teacher-prompt {
+    background: var(--accent-bg); border: 1px solid var(--accent); border-radius: var(--radius);
+    padding: 1rem 1.5rem; margin: -0.25rem 0 1.25rem; font-size: 0.85rem; line-height: 1.55; color: #8b4513;
+  }
+  .teacher-prompt strong { color: #8b4513; }
+
+  /* Feature guide */
+  .annotation-block { display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin: 2rem 0; }
+  @media (min-width: 700px) { .annotation-block { grid-template-columns: 1fr 1fr; } }
+  .anno-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .anno-card-header {
+    padding: 0.9rem 1.25rem; font-weight: 700; font-size: 0.82rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .anno-card-body { padding: 0 1.25rem 1.25rem; font-size: 0.88rem; line-height: 1.65; }
+  .anno-card-body blockquote {
+    border-left: 3px solid var(--border); padding-left: 1rem; margin: 0.7rem 0;
+    color: var(--text-light); font-style: italic; font-size: 0.85rem;
+  }
+  .anno-card-body .tip {
+    background: var(--bg-soft); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.75rem;
+    font-size: 0.82rem; border-left: 3px solid var(--accent-strong);
+  }
+  .anno-card-body .tip strong { color: var(--accent-strong); }
+
+  .tips-grid { display: grid; gap: 1.25rem; margin: 1.5rem 0; }
+  @media (min-width: 700px) { .tips-grid { grid-template-columns: 1fr 1fr; } }
+  .tip-card { background: var(--bg-soft); border-radius: var(--radius); padding: 1.5rem 1.75rem; }
+  .tip-card h4 { font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .tip-card ul { padding-left: 1.1rem; font-size: 0.88rem; }
+  .tip-card li { margin-bottom: 0.35rem; }
+
+  /* ── NAV ARROWS ── */
+  .nav-arrows {
+    position: fixed; bottom: 1.5rem; right: 2rem; display: flex; gap: 0.5rem; z-index: 50;
+  }
+  .nav-arrow-btn {
+    width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font-size: 1.1rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .nav-arrow-btn:hover { background: var(--bg-soft); }
+  .nav-arrow-btn:disabled { opacity: 0.3; cursor: default; }
+
+  /* Page counter */
+  .page-counter {
+    position: fixed; top: 1.2rem; right: 2rem; font-size: 0.78rem;
+    font-weight: 700; color: var(--text-light); z-index: 50;
+  }
+  .page-counter .current { color: var(--accent-strong); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .sidebar { width: 200px; min-width: 200px; }
+    .panel { padding: 2rem 1.5rem 3rem; }
+    .kw-row { grid-template-columns: 1fr; gap: 0.25rem; }
+    .annotation-block { grid-template-columns: 1fr; }
+    .tips-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-label">Chapters</div>
+  <ul class="sidebar-nav" id="sidebarNav">
+    <li><button class="active" data-panel="overview"><span class="nav-num">01</span> Overview</button></li>
+    <li><button data-panel="question"><span class="nav-num">02</span> The Question</button></li>
+    <li><button data-panel="deconstruct"><span class="nav-num">03</span> Deconstruct</button></li>
+    <li><button data-panel="exemplar-intro"><span class="nav-num">04</span> Introduction</button></li>
+    <li><button data-panel="exemplar-p1"><span class="nav-num">05</span> Paragraph 1</button></li>
+    <li><button data-panel="exemplar-p2"><span class="nav-num">06</span> Paragraph 2</button></li>
+    <li><button data-panel="exemplar-p3"><span class="nav-num">07</span> Paragraph 3</button></li>
+    <li><button data-panel="exemplar-conc"><span class="nav-num">08</span> Conclusion</button></li>
+    <li><button data-panel="features"><span class="nav-num">09</span> Feature Guide</button></li>
+  </ul>
+  <div class="sidebar-footer">Ancient History &middot; Extended Response</div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div class="main-panel" id="mainPanel">
+
+  <!-- Page counter -->
+  <div class="page-counter"><span class="current" id="currentPage">1</span>/9</div>
+
+  <!-- ═══ 01 OVERVIEW ═══ -->
+  <div class="panel active" id="panel-overview">
+    <div class="hero-panel" style="border-radius: var(--radius); margin-bottom: 1.5rem;">
+      <div class="hero-inner">
+        <span class="hero-label">Ancient History &middot; Extended Response</span>
+        <h1>Treatment and Display of Human Remains</h1>
+        <p class="hero-subtitle">The Passage of Time and Human Remains</p>
+        <p>Deconstruct the question, analyse a model answer paragraph by paragraph, and master the PEEL structure with evaluative language.</p>
+      </div>
+    </div>
+
+    <span class="section-label">Learning Intentions &amp; Success Criteria</span>
+    <h2>What We&rsquo;re Learning</h2>
+    <table class="lisc-table">
+      <thead>
+        <tr>
+          <th>Learning Intention</th>
+          <th>Success Criteria</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            We are learning to plan and write an extended response that evaluates how the passage of time affects ethical obligations regarding human remains, using case studies and legal frameworks as evidence.
+          </td>
+          <td>
+            <ul>
+              <li>I can identify the command verb, stimulus, and key content words in an extended response question</li>
+              <li>I can explain what &ldquo;evaluate&rdquo; requires and how it differs from &ldquo;describe&rdquo; or &ldquo;explain&rdquo;</li>
+              <li>I can select case studies that directly address the TIME dimension of the stimulus</li>
+              <li>I can identify the PEEL structure (Point, Evidence, Explain, Link) within a body paragraph</li>
+              <li>I can recognise the features of an effective introduction (position and roadmap) and conclusion (return to stimulus, conditional judgement, elevation)</li>
+              <li>I can identify judgement language throughout a response and explain why it is essential for evaluation</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══ 03 THE QUESTION ═══ -->
+  <div class="panel" id="panel-question">
+    <span class="section-label">Part 1</span>
+    <h2>The Question</h2>
+    <p>Read the question carefully. Before writing, you need to understand exactly what it demands.</p>
+    <div class="question-box">
+      <em>&ldquo;The passage of time diminishes the ethical obligation to return ancient human remains to their communities of origin.&rdquo;</em><br><br>
+      Evaluate this statement with reference to relevant case studies and legal/ethical frameworks.
+      <span class="marks">20 Marks &middot; 40&ndash;45 minutes &middot; 600&ndash;800 words</span>
+    </div>
+  </div>
+
+  <!-- ═══ 04 DECONSTRUCT ═══ -->
+  <div class="panel" id="panel-deconstruct">
+    <span class="section-label">Part 2</span>
+    <h2>Deconstructing the Question</h2>
+    <p>Work through each step. Write down your own answers first, then reveal to check.</p>
+
+    <div class="reveal-section" id="revealSection">
+      <!-- STEP 1 -->
+      <div class="step-block">
+        <span class="step-tag">Step 1</span>
+        <h3>Identify the Command Verb</h3>
+        <p class="step-prompt">What is the key verb telling you what to do? Write it down.</p>
+        <div class="reveal-item" data-reveal="1">
+          <div class="reveal-answer highlight">
+            <span class="label-sm">The command verb is</span>
+            <strong style="font-size:1.15rem;">EVALUATE</strong>
+          </div>
+        </div>
+        <p class="step-prompt reveal-item" data-reveal="2" style="margin-top:0.75rem; margin-bottom:0.25rem; font-size:0.88rem; color:var(--text-light);">What does &ldquo;evaluate&rdquo; require? What mistakes should you avoid?</p>
+        <div class="reveal-item" data-reveal="2">
+          <div class="reveal-answer"><strong>Weigh up arguments on both sides</strong> &mdash; avoid only arguing one side</div>
+        </div>
+        <div class="reveal-item" data-reveal="3">
+          <div class="reveal-answer"><strong>Reach a clear, reasoned judgement</strong> &mdash; avoid listing arguments without a judgement</div>
+        </div>
+        <div class="reveal-item" data-reveal="4">
+          <div class="reveal-answer"><strong>Consider strength and limitations of each position</strong> &mdash; avoid describing without explaining significance</div>
+        </div>
+        <div class="reveal-item" data-reveal="5">
+          <div class="reveal-answer"><strong>Use case studies and legal frameworks as evidence</strong> &mdash; avoid claims without evidence</div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-block">
+        <span class="step-tag">Step 2</span>
+        <h3>Identify the Stimulus</h3>
+        <p class="step-prompt">What statement are you responding to? What does the verb require you to do with it?</p>
+        <div class="reveal-item" data-reveal="6">
+          <div class="reveal-answer highlight">
+            <span class="label-sm">The stimulus is</span>
+            <strong>&ldquo;The passage of time diminishes the ethical obligation to return ancient human remains to their communities of origin.&rdquo;</strong>
+          </div>
+        </div>
+        <div class="reveal-item" data-reveal="7">
+          <div class="reveal-answer">You are <strong>not</strong> asked whether this is true &mdash; you must <strong>evaluate</strong> it: examine when time might genuinely reduce obligation, and when it clearly does not.</div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-block">
+        <span class="step-tag">Step 3</span>
+        <h3>Break Down the Key Words</h3>
+        <p class="step-prompt">Identify the key content words. For each: what does it mean, and what should you ask yourself?</p>
+        <div class="reveal-item" data-reveal="8">
+          <div class="kw-row">
+            <div class="kw-term">&ldquo;Passage of time&rdquo;</div>
+            <div class="kw-means">The central variable &mdash; does the AGE of remains change our moral obligations?</div>
+            <div class="kw-ask">Are 2,000-year-old remains different from 40,000-year-old remains? Why or why not?</div>
+          </div>
+        </div>
+        <div class="reveal-item" data-reveal="9">
+          <div class="kw-row">
+            <div class="kw-term">&ldquo;Diminishes&rdquo;</div>
+            <div class="kw-means">Not &ldquo;eliminates&rdquo; &mdash; claims obligation is <em>reduced</em>, not removed. This nuance matters.</div>
+            <div class="kw-ask">Is there a point at which obligation genuinely weakens? Or does it persist regardless?</div>
+          </div>
+        </div>
+        <div class="reveal-item" data-reveal="10">
+          <div class="kw-row">
+            <div class="kw-term">&ldquo;Ethical obligation&rdquo;</div>
+            <div class="kw-means">A moral duty &mdash; not just a legal one. What principles create this obligation?</div>
+            <div class="kw-ask">Where does this obligation come from? Cultural connection? Human dignity? Consent?</div>
+          </div>
+        </div>
+        <div class="reveal-item" data-reveal="11">
+          <div class="kw-row">
+            <div class="kw-term">&ldquo;Communities of origin&rdquo;</div>
+            <div class="kw-means">Assumes a community exists to return remains to. What happens when it doesn&rsquo;t?</div>
+            <div class="kw-ask">Does the argument change when there IS a living community versus when there isn&rsquo;t?</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="step-block">
+        <span class="step-tag">Step 4</span>
+        <h3>Plan Before You Write</h3>
+        <p class="step-prompt">Before writing, check you can tick off each of these.</p>
+        <div class="reveal-item" data-reveal="12">
+          <div class="check-item">Do I have a clear position? (Partial agree/disagree is fine &mdash; but be decisive)</div>
+        </div>
+        <div class="reveal-item" data-reveal="13">
+          <div class="check-item">Have I chosen case studies where TIME is specifically relevant to the argument?</div>
+        </div>
+        <div class="reveal-item" data-reveal="14">
+          <div class="check-item">Can I cite at least two legal frameworks? Do any of them include a time limit?</div>
+        </div>
+        <div class="reveal-item" data-reveal="15">
+          <div class="check-item">Am I arguing BOTH sides &mdash; one paragraph supporting the stimulus and at least one challenging it?</div>
+        </div>
+        <div class="reveal-item" data-reveal="16">
+          <div class="check-item">Does my plan include: Introduction + 3 PEEL paragraphs + Conclusion?</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Floating reveal button (visible only on Deconstruct panel) -->
+  <div class="reveal-btn-wrap" id="revealBtnWrap">
+    <button class="reveal-btn" id="revealBtn" onclick="revealNext()">Reveal next <span class="arrow">&rarr;</span></button>
+  </div>
+
+  <!-- ═══ 05 EXEMPLAR — INTRODUCTION ═══ -->
+  <div class="panel" id="panel-exemplar-intro">
+    <span class="section-label">Part 3 &middot; Exemplar</span>
+    <h2>Introduction</h2>
+    <p>Toggle features to see how the introduction is constructed. The <strong>Position</strong> engages directly with the stimulus; the <strong>Roadmap</strong> previews the three areas of evaluation.</p>
+
+    <div class="legend">
+      <div class="legend-group-label">Introduction Features</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-position)"></span> Position</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-roadmap)"></span> Roadmap</div>
+      <div class="legend-group-label">All Paragraphs</div>
+      <div class="legend-item"><span class="legend-chip underline"></span> Judgement Language</div>
+    </div>
+
+    <div class="para-block">
+      <input type="checkbox" class="toggle-cb" id="intro-position">
+      <input type="checkbox" class="toggle-cb" id="intro-roadmap">
+      <input type="checkbox" class="toggle-cb" id="intro-judge">
+      <input type="checkbox" class="toggle-cb" id="intro-all">
+      <div class="para-block-header">
+        <span class="para-block-title">Introduction</span>
+        <div class="toggle-controls">
+          <label class="toggle-label" for="intro-position"><span class="chip" style="background:var(--chip-position)"></span> Position</label>
+          <label class="toggle-label" for="intro-roadmap"><span class="chip" style="background:var(--chip-roadmap)"></span> Roadmap</label>
+          <label class="toggle-label" for="intro-judge"><span class="chip-line"></span> Judgement</label>
+          <label class="toggle-label" for="intro-all">All</label>
+        </div>
+      </div>
+      <div class="para-block-body">
+        <p><span class="hl-position">The claim that time diminishes the ethical obligation to return human remains <span class="hl-judge">oversimplifies</span> a deeply contested debate.</span> <span class="hl-roadmap">An evaluation of the Lake Mungo repatriation, the case of Lindow Man, and international legal frameworks such as NAGPRA and UNDRIP <span class="hl-judge">reveals that</span> ethical obligation <span class="hl-judge">persists regardless of time</span> &mdash; though its application may vary with circumstances.</span></p>
+      </div>
+    </div>
+
+    <div class="teacher-prompt">
+      <strong>Teaching moment:</strong> Point out that &ldquo;oversimplifies&rdquo; is the single word that tells the marker the writer&rsquo;s position. Show how the brainstorm of case studies became the Roadmap sentence &mdash; every case study selected during planning is now named in the introduction. Toggle Judgement to reveal the evaluative phrases that do the analytical heavy lifting.
+    </div>
+  </div>
+
+  <!-- ═══ 06 EXEMPLAR — PARAGRAPH 1 ═══ -->
+  <div class="panel" id="panel-exemplar-p1">
+    <span class="section-label">Part 3 &middot; Exemplar</span>
+    <h2>Paragraph 1 &mdash; When Time May Matter</h2>
+
+    <div class="legend">
+      <div class="legend-group-label">Body Paragraph (PEEL)</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-point)"></span> P &mdash; Point</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-evidence)"></span> E &mdash; Evidence</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-explain)"></span> E &mdash; Explain</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-link)"></span> L &mdash; Link</div>
+      <div class="legend-group-label">All Paragraphs</div>
+      <div class="legend-item"><span class="legend-chip underline"></span> Judgement Language</div>
+    </div>
+
+    <div class="para-block">
+      <input type="checkbox" class="toggle-cb" id="p1-point">
+      <input type="checkbox" class="toggle-cb" id="p1-evidence">
+      <input type="checkbox" class="toggle-cb" id="p1-explain">
+      <input type="checkbox" class="toggle-cb" id="p1-link">
+      <input type="checkbox" class="toggle-cb" id="p1-judge">
+      <input type="checkbox" class="toggle-cb" id="p1-all">
+      <div class="para-block-header">
+        <span class="para-block-title">Paragraph 1 &mdash; When Time May Matter</span>
+        <div class="toggle-controls">
+          <label class="toggle-label" for="p1-point"><span class="chip" style="background:var(--chip-point)"></span> P</label>
+          <label class="toggle-label" for="p1-evidence"><span class="chip" style="background:var(--chip-evidence)"></span> E</label>
+          <label class="toggle-label" for="p1-explain"><span class="chip" style="background:var(--chip-explain)"></span> E</label>
+          <label class="toggle-label" for="p1-link"><span class="chip" style="background:var(--chip-link)"></span> L</label>
+          <label class="toggle-label" for="p1-judge"><span class="chip-line"></span> J</label>
+          <label class="toggle-label" for="p1-all">All</label>
+        </div>
+      </div>
+      <div class="para-block-body">
+        <p><span class="hl-point">There are circumstances in which the passage of time <span class="hl-judge">may legitimately</span> reduce the obligation to return remains, particularly when no identifiable descendant community exists to receive them.</span> <span class="hl-evidence">The case of Lindow Man, an Iron Age bog body discovered in 1984 and held at the British Museum, demonstrates this. With no identifiable descendant community making claims for return, the Museum has employed DNA analysis, isotope studies, and CT scanning to reveal significant details about Iron Age Britain.</span> <span class="hl-explain">This illustrates that when vast periods of time have severed any identifiable cultural connection, institutional custody <span class="hl-judge">serves a legitimate function</span> &mdash; protecting remains from deterioration and enabling continued research for broad public benefit.</span> <span class="hl-link">In this limited context, the statement&rsquo;s claim that time diminishes obligation is <span class="hl-judge">defensible</span>. However, this argument <span class="hl-judge">collapses</span> when applied to cases where living descendant communities exist.</span></p>
+      </div>
+    </div>
+
+    <div class="teacher-prompt">
+      <strong>I Do &mdash; modelling:</strong> This paragraph argues the side the writer DISAGREES with. Explain to students that this is deliberate: a Band 5/6 response considers both sides. Point out the word &ldquo;may&rdquo; in the Point &mdash; it concedes the argument carefully without fully committing. Ask students to underline the evaluative words: &ldquo;may legitimately,&rdquo; &ldquo;serves a legitimate function,&rdquo; &ldquo;defensible,&rdquo; &ldquo;collapses.&rdquo;
+    </div>
+  </div>
+
+  <!-- ═══ 07 EXEMPLAR — PARAGRAPH 2 ═══ -->
+  <div class="panel" id="panel-exemplar-p2">
+    <span class="section-label">Part 3 &middot; Exemplar</span>
+    <h2>Paragraph 2 &mdash; Challenging the Claim</h2>
+
+    <div class="legend">
+      <div class="legend-group-label">Body Paragraph (PEEL)</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-point)"></span> P &mdash; Point</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-evidence)"></span> E &mdash; Evidence</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-explain)"></span> E &mdash; Explain</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-link)"></span> L &mdash; Link</div>
+      <div class="legend-group-label">All Paragraphs</div>
+      <div class="legend-item"><span class="legend-chip underline"></span> Judgement Language</div>
+    </div>
+
+    <div class="para-block">
+      <input type="checkbox" class="toggle-cb" id="p2-point">
+      <input type="checkbox" class="toggle-cb" id="p2-evidence">
+      <input type="checkbox" class="toggle-cb" id="p2-explain">
+      <input type="checkbox" class="toggle-cb" id="p2-link">
+      <input type="checkbox" class="toggle-cb" id="p2-judge">
+      <input type="checkbox" class="toggle-cb" id="p2-all">
+      <div class="para-block-header">
+        <span class="para-block-title">Paragraph 2 &mdash; Challenging the Claim</span>
+        <div class="toggle-controls">
+          <label class="toggle-label" for="p2-point"><span class="chip" style="background:var(--chip-point)"></span> P</label>
+          <label class="toggle-label" for="p2-evidence"><span class="chip" style="background:var(--chip-evidence)"></span> E</label>
+          <label class="toggle-label" for="p2-explain"><span class="chip" style="background:var(--chip-explain)"></span> E</label>
+          <label class="toggle-label" for="p2-link"><span class="chip" style="background:var(--chip-link)"></span> L</label>
+          <label class="toggle-label" for="p2-judge"><span class="chip-line"></span> J</label>
+          <label class="toggle-label" for="p2-all">All</label>
+        </div>
+      </div>
+      <div class="para-block-body">
+        <p><span class="hl-point">The repatriation of Mungo Man <span class="hl-judge">fundamentally challenges</span> the claim that time diminishes ethical obligation, demonstrating that a 40,000-year passage of time did not weaken the moral duty owed to descendant communities.</span> <span class="hl-evidence">Removed from Country without consent, the remains of Mungo Man (LM3) &mdash; approximately 40,000 years old &mdash; were held in institutional custody for decades before the Paakantji, Ngyiampaa, and Mutthi Mutthi peoples secured their return to NSW National Parks and Wildlife Service custody in 1992, followed by formal reburial in 2017. The Traditional Custodians&rsquo; declaration &mdash; &ldquo;Our ancestor is home&rdquo; &mdash; powerfully articulates the enduring spiritual connection that institutional custody had denied.</span> <span class="hl-explain">This case demonstrates that the passage of time, no matter how vast, <span class="hl-judge">does not extinguish</span> the cultural and spiritual bonds between communities and their ancestors. The obligation to return remains persisted across 40,000 years precisely because the community&rsquo;s connection was never broken &mdash; it was <span class="hl-judge">merely overridden</span> by colonial dispossession.</span> <span class="hl-link">Lake Mungo thus <span class="hl-judge">directly refutes</span> the stimulus &mdash; time did not diminish obligation, and the community&rsquo;s persistent claim exposes the statement&rsquo;s assumption as <span class="hl-judge">historically and morally flawed</span>.</span></p>
+      </div>
+    </div>
+
+    <div class="teacher-prompt">
+      <strong>We Do &mdash; guided practice:</strong> Co-construct this paragraph with the class. Students draft Point sentences in pairs (30 seconds), then cold call 2&ndash;3 pairs to share. Collect Lake Mungo evidence details on the board: removed without consent, 40,000 years old, returned 1992, reburied 2017, &ldquo;Our ancestor is home.&rdquo; Students write their own Link sentence independently (60 seconds), then reveal to check.
+    </div>
+  </div>
+
+  <!-- ═══ 08 EXEMPLAR — PARAGRAPH 3 ═══ -->
+  <div class="panel" id="panel-exemplar-p3">
+    <span class="section-label">Part 3 &middot; Exemplar</span>
+    <h2>Paragraph 3 &mdash; Legal &amp; Ethical Frameworks</h2>
+
+    <div class="legend">
+      <div class="legend-group-label">Body Paragraph (PEEL)</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-point)"></span> P &mdash; Point</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-evidence)"></span> E &mdash; Evidence</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-explain)"></span> E &mdash; Explain</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-link)"></span> L &mdash; Link</div>
+      <div class="legend-group-label">All Paragraphs</div>
+      <div class="legend-item"><span class="legend-chip underline"></span> Judgement Language</div>
+    </div>
+
+    <div class="para-block">
+      <input type="checkbox" class="toggle-cb" id="p3-point">
+      <input type="checkbox" class="toggle-cb" id="p3-evidence">
+      <input type="checkbox" class="toggle-cb" id="p3-explain">
+      <input type="checkbox" class="toggle-cb" id="p3-link">
+      <input type="checkbox" class="toggle-cb" id="p3-judge">
+      <input type="checkbox" class="toggle-cb" id="p3-all">
+      <div class="para-block-header">
+        <span class="para-block-title">Paragraph 3 &mdash; Legal &amp; Ethical Frameworks</span>
+        <div class="toggle-controls">
+          <label class="toggle-label" for="p3-point"><span class="chip" style="background:var(--chip-point)"></span> P</label>
+          <label class="toggle-label" for="p3-evidence"><span class="chip" style="background:var(--chip-evidence)"></span> E</label>
+          <label class="toggle-label" for="p3-explain"><span class="chip" style="background:var(--chip-explain)"></span> E</label>
+          <label class="toggle-label" for="p3-link"><span class="chip" style="background:var(--chip-link)"></span> L</label>
+          <label class="toggle-label" for="p3-judge"><span class="chip-line"></span> J</label>
+          <label class="toggle-label" for="p3-all">All</label>
+        </div>
+      </div>
+      <div class="para-block-body">
+        <p><span class="hl-point">International legal frameworks <span class="hl-judge">further undermine</span> the statement by establishing repatriation rights without any temporal limitation.</span> <span class="hl-evidence">The 1990 Native American Graves Protection and Repatriation Act (NAGPRA) legally compelled US museums and federal agencies to return Native American remains regardless of their age. The 2007 UN Declaration on the Rights of Indigenous Peoples (UNDRIP), Article 12, formally recognised the right of Indigenous peoples to the repatriation of human remains and cultural property &mdash; again, with no time restriction. The ICOM Code of Ethics further requires museums to respond with sensitivity to repatriation requests, acknowledging community interests over institutional claims.</span> <span class="hl-explain">The absence of any time limit in these frameworks is <span class="hl-judge">significant</span>: the international community has <span class="hl-judge">explicitly rejected</span> the idea that the passage of time diminishes the obligation to return remains. These laws do not distinguish between remains that are centuries old and those that are millennia old.</span> <span class="hl-link">Collectively, these frameworks confirm that the legal and ethical consensus stands in <span class="hl-judge">direct opposition</span> to the statement&rsquo;s central claim &mdash; obligation <span class="hl-judge">endures</span>, regardless of time.</span></p>
+      </div>
+    </div>
+
+    <div class="teacher-prompt">
+      <strong>You Do &mdash; independent practice:</strong> Students write this paragraph independently using the scaffolded worksheet. They can check the PEEL scaffold afterwards. If CFU checks show more than a third of the class struggling after the &lsquo;We Do&rsquo; phase, consider modelling this paragraph before releasing students to independent work.
+    </div>
+  </div>
+
+  <!-- ═══ 09 EXEMPLAR — CONCLUSION ═══ -->
+  <div class="panel" id="panel-exemplar-conc">
+    <span class="section-label">Part 3 &middot; Exemplar</span>
+    <h2>Conclusion</h2>
+    <p>The conclusion brings together three key moves: returning to the stimulus, delivering a conditional judgement, and elevating to a broader reflection.</p>
+
+    <div class="legend">
+      <div class="legend-group-label">Conclusion Features</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-stimulus)"></span> Stimulus</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-conditional)"></span> Conditional Judgement</div>
+      <div class="legend-item"><span class="legend-chip" style="background:var(--chip-elevation)"></span> Elevation</div>
+      <div class="legend-group-label">All Paragraphs</div>
+      <div class="legend-item"><span class="legend-chip underline"></span> Judgement Language</div>
+    </div>
+
+    <div class="para-block">
+      <input type="checkbox" class="toggle-cb" id="conc-stimulus">
+      <input type="checkbox" class="toggle-cb" id="conc-conditional">
+      <input type="checkbox" class="toggle-cb" id="conc-elevation">
+      <input type="checkbox" class="toggle-cb" id="conc-judge">
+      <input type="checkbox" class="toggle-cb" id="conc-all">
+      <div class="para-block-header">
+        <span class="para-block-title">Conclusion</span>
+        <div class="toggle-controls">
+          <label class="toggle-label" for="conc-stimulus"><span class="chip" style="background:var(--chip-stimulus)"></span> Stimulus</label>
+          <label class="toggle-label" for="conc-conditional"><span class="chip" style="background:var(--chip-conditional)"></span> Conditional</label>
+          <label class="toggle-label" for="conc-elevation"><span class="chip" style="background:var(--chip-elevation)"></span> Elevation</label>
+          <label class="toggle-label" for="conc-judge"><span class="chip-line"></span> Judgement</label>
+          <label class="toggle-label" for="conc-all">All</label>
+        </div>
+      </div>
+      <div class="para-block-body">
+        <p><span class="hl-stimulus">Ultimately, the assertion that time diminishes the ethical obligation to return human remains <span class="hl-judge">cannot withstand scrutiny</span> when tested against the evidence.</span> <span class="hl-conditional">Where no living descendant community can be identified, as in the case of Lindow Man, the practical expression of obligation <span class="hl-judge">may change</span>. However, where communities maintain ongoing spiritual and cultural connections &mdash; as the Lake Mungo repatriation powerfully demonstrates &mdash; time <span class="hl-judge">does not weaken</span> the moral duty owed.</span> <span class="hl-elevation">The deeper question is not whether time erases obligation, but whether those in power are willing to honour it.</span></p>
+      </div>
+    </div>
+
+    <div class="teacher-prompt">
+      <strong>Teaching moment:</strong> Point out the conditional pattern: &ldquo;Where [X]&hellip; However, where [Y]&hellip;&rdquo; This structure shows nuance &mdash; the writer distinguishes between situations rather than giving an absolute answer. The final sentence (Elevation) reframes the entire debate from a question about time to a question about power. Ask students: &ldquo;Does this sentence introduce new evidence?&rdquo; (No &mdash; it reframes. That&rsquo;s what elevation does.)
+    </div>
+  </div>
+
+  <!-- ═══ 10 FEATURE GUIDE ═══ -->
+  <div class="panel" id="panel-features">
+    <span class="section-label">Part 4</span>
+    <h2>Feature Guide</h2>
+    <p>What each feature does, where it appears, and how to use it in your own writing.</p>
+
+    <div class="annotation-block">
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-position);">
+          <span class="legend-chip" style="background:var(--chip-position)"></span> Position (Introduction)
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> States your responding judgement in the very first sentence. It signals your stance on the stimulus without saying &ldquo;I agree&rdquo; or &ldquo;I disagree.&rdquo;</p>
+          <blockquote>&ldquo;&hellip;oversimplifies a deeply contested debate&hellip;&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> Write your position as a single sentence that a reader could understand without the rest of the essay. If it&rsquo;s vague, it&rsquo;s not a position.</div>
+        </div>
+      </article>
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-roadmap);">
+          <span class="legend-chip" style="background:var(--chip-roadmap)"></span> Roadmap (Introduction)
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> Previews the 2&ndash;3 areas your response will address. Shows the marker your essay is planned, not improvised.</p>
+          <blockquote>&ldquo;An evaluation of the Lake Mungo repatriation, the case of Lindow Man, and international legal frameworks&hellip;&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> Your roadmap should map directly to your body paragraphs. If your roadmap names three things, you need three paragraphs.</div>
+        </div>
+      </article>
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-point);">
+          <span class="legend-chip" style="background:var(--chip-point)"></span> P &mdash; Point
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> One sentence stating the paragraph&rsquo;s argument. No evidence &mdash; just commit to a claim.</p>
+          <blockquote>&ldquo;There are circumstances in which the passage of time may legitimately reduce the obligation&hellip;&rdquo;</blockquote>
+          <blockquote>&ldquo;The repatriation of Mungo Man fundamentally challenges the claim&hellip;&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> Write all your Points first. If they read like a mini-essay, your structure is solid.</div>
+        </div>
+      </article>
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-evidence);">
+          <span class="legend-chip" style="background:var(--chip-evidence)"></span> E &mdash; Evidence
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> Specific case studies, dates, legal frameworks, or primary source quotations.</p>
+          <blockquote>&ldquo;Lindow Man&hellip; 1984&hellip; DNA analysis, isotope studies, CT scanning&hellip;&rdquo;</blockquote>
+          <blockquote>&ldquo;NAGPRA (1990)&hellip; UNDRIP Article 12 (2007)&hellip; ICOM Code of Ethics&hellip;&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> Choose case studies that directly address the TIME dimension of the stimulus. Generic examples weaken evaluation.</div>
+        </div>
+      </article>
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-explain);">
+          <span class="legend-chip" style="background:var(--chip-explain)"></span> E &mdash; Explain
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> Interprets evidence. No new info &mdash; explains <strong>why</strong> it supports the Point.</p>
+          <blockquote>&ldquo;&hellip;the passage of time, no matter how vast, does not extinguish the cultural and spiritual bonds&hellip;&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> After evidence, ask: &ldquo;So what? Why does this matter?&rdquo; That answer is your Explain.</div>
+        </div>
+      </article>
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-link);">
+          <span class="legend-chip" style="background:var(--chip-link)"></span> L &mdash; Link
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> Returns to the question&rsquo;s language and advances the argument. Not a restatement &mdash; a progression.</p>
+          <blockquote>&ldquo;&hellip;this argument collapses when applied to cases where living descendant communities exist.&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> Good Link sentences look forward. Set up the next paragraph by signalling where the argument goes next.</div>
+        </div>
+      </article>
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-conditional);">
+          <span class="legend-chip" style="background:var(--chip-conditional)"></span> Conditional Judgement (Conclusion)
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> Delivers your final position using &ldquo;where&hellip; / however, where&hellip;&rdquo; to show that the answer depends on context.</p>
+          <blockquote>&ldquo;Where no living descendant community can be identified&hellip; the practical expression of obligation may change. However, where communities maintain ongoing&hellip; connections&hellip;&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> A conditional judgement is stronger than an absolute one. It shows you can distinguish between situations.</div>
+        </div>
+      </article>
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:var(--color-elevation);">
+          <span class="legend-chip" style="background:var(--chip-elevation)"></span> Elevation (Conclusion)
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> Moves beyond the specific question to a broader ethical or historical reflection.</p>
+          <blockquote>&ldquo;The deeper question is not whether time erases obligation, but whether those in power are willing to honour it.&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> Your final sentence should make the reader think beyond the essay. Aim for one sentence of genuine insight.</div>
+        </div>
+      </article>
+      <article class="anno-card">
+        <div class="anno-card-header" style="background:#fff8f0; border-bottom: 1px solid #f9d6af;">
+          <span class="legend-chip" style="background:var(--chip-judge)"></span> Judgement Language
+        </div>
+        <div class="anno-card-body">
+          <p><strong>What it does:</strong> These are the words and phrases that transform description into evaluation.</p>
+          <blockquote>&ldquo;oversimplifies&rdquo; &middot; &ldquo;may legitimately&rdquo; &middot; &ldquo;serves a legitimate function&rdquo; &middot; &ldquo;defensible&rdquo; &middot; &ldquo;collapses&rdquo; &middot; &ldquo;fundamentally challenges&rdquo; &middot; &ldquo;does not extinguish&rdquo; &middot; &ldquo;directly refutes&rdquo; &middot; &ldquo;cannot withstand scrutiny&rdquo;</blockquote>
+          <div class="tip"><strong>Tip:</strong> Evaluation must run through the whole paragraph, not just appear in the Link at the end. If your paragraph only describes and then evaluates in the last line, you&rsquo;re narrating with a judgement tacked on.</div>
+        </div>
+      </article>
+    </div>
+
+    <h3 style="margin-top: 2.5rem;">Quick-Reference Writing Tips</h3>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <h4>Language Precision</h4>
+        <ul>
+          <li>&ldquo;Oversimplifies&rdquo; beats &ldquo;is wrong&rdquo;</li>
+          <li>&ldquo;Fundamentally challenges&rdquo; beats &ldquo;goes against&rdquo;</li>
+          <li>&ldquo;Does not extinguish&rdquo; shows permanence better than &ldquo;doesn&rsquo;t remove&rdquo;</li>
+          <li>&ldquo;Colonial dispossession&rdquo; shows broad historical understanding</li>
+        </ul>
+      </div>
+      <div class="tip-card">
+        <h4>Evaluative Moves</h4>
+        <ul>
+          <li>Argue the side you disagree with FIRST &mdash; finish strong</li>
+          <li>&ldquo;Where&hellip; / however, where&hellip;&rdquo; for conditional judgement</li>
+          <li>Qualify &mdash; don&rsquo;t generalise. &ldquo;In this limited context&rdquo; beats &ldquo;always&rdquo;</li>
+          <li>End with broader reflection, not a summary</li>
+        </ul>
+      </div>
+      <div class="tip-card">
+        <h4>Evidence Standards</h4>
+        <ul>
+          <li>Choose case studies where TIME is directly relevant to the argument</li>
+          <li>Name case study, date, and location every time</li>
+          <li>Cite specific articles (e.g. &ldquo;UNDRIP, Article 12&rdquo;)</li>
+          <li>Ask: do any legal frameworks include a time limit? (No &mdash; that&rsquo;s significant)</li>
+        </ul>
+      </div>
+      <div class="tip-card">
+        <h4>Structure Essentials</h4>
+        <ul>
+          <li>Introduction: position + roadmap (never &ldquo;I agree/disagree&rdquo;)</li>
+          <li>Body: 3 &times; PEEL &mdash; supporting argument first, then challenges</li>
+          <li>Conclusion: stimulus + conditional judgement + elevation</li>
+          <li>Judgement language in <em>every</em> paragraph, not just the conclusion</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAV ARROWS -->
+<div class="nav-arrows">
+  <button class="nav-arrow-btn" id="prevBtn" onclick="navigate(-1)" disabled>&larr;</button>
+  <button class="nav-arrow-btn" id="nextBtn" onclick="navigate(1)">&rarr;</button>
+</div>
+
+<script>
+(function() {
+  var panels = [
+    'overview', 'question', 'deconstruct',
+    'exemplar-intro', 'exemplar-p1', 'exemplar-p2', 'exemplar-p3', 'exemplar-conc',
+    'features'
+  ];
+  var currentIndex = 0;
+  var buttons = document.querySelectorAll('#sidebarNav button');
+  var mainPanel = document.getElementById('mainPanel');
+
+  function showPanel(index) {
+    if (index < 0 || index >= panels.length) return;
+    currentIndex = index;
+
+    // Hide all panels
+    panels.forEach(function(id) {
+      document.getElementById('panel-' + id).classList.remove('active');
+    });
+    // Show target
+    document.getElementById('panel-' + panels[index]).classList.add('active');
+
+    // Update sidebar
+    buttons.forEach(function(btn) { btn.classList.remove('active'); });
+    buttons[index].classList.add('active');
+
+    // Update page counter
+    document.getElementById('currentPage').textContent = index + 1;
+
+    // Update arrow buttons
+    document.getElementById('prevBtn').disabled = (index === 0);
+    document.getElementById('nextBtn').disabled = (index === panels.length - 1);
+
+    // Show floating reveal button only on Deconstruct panel
+    var revealWrap = document.getElementById('revealBtnWrap');
+    if (panels[index] === 'deconstruct') {
+      revealWrap.classList.add('visible');
+    } else {
+      revealWrap.classList.remove('visible');
+    }
+
+    // Scroll main panel to top
+    mainPanel.scrollTop = 0;
+  }
+
+  // Sidebar click
+  buttons.forEach(function(btn, i) {
+    btn.addEventListener('click', function() { showPanel(i); });
+  });
+
+  // Arrow navigation
+  window.navigate = function(dir) { showPanel(currentIndex + dir); };
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); navigate(-1); }
+  });
+
+  // Reveal system for deconstruct panel
+  var total = 16, current = 0, btn = document.getElementById('revealBtn');
+  window.revealNext = function() {
+    if (current >= total) return;
+    current++;
+    document.querySelectorAll('[data-reveal="' + current + '"]').forEach(function(el) {
+      el.classList.add('revealed');
+    });
+    var remaining = total - current;
+    btn.innerHTML = remaining > 0
+      ? 'Reveal next (' + remaining + ' remaining) <span class="arrow">&rarr;</span>'
+      : 'All revealed &#10003;';
+    if (!remaining) btn.classList.add('done');
+  };
+})();
+</script>
+
+</body>
+</html>
