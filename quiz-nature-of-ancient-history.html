@@ -1,0 +1,1798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Can You Dig It? — Year 11 Ancient History Revision Quiz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --font-display: 'Libre Baskerville', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --bg: #FFFFFF;
+    --bg-soft: #f4efe5;
+    --bg-dark: #1e1610;
+    --accent: #f9d6af;
+    --accent-strong: #ff9764;
+    --accent-bg: #fff8f0;
+    --text: #1e1610;
+    --text-light: #8a7d6b;
+    --text-on-dark: #f4efe5;
+    --border: #e5ddd1;
+    --radius: 12px;
+    --correct: #4abe6a;
+    --correct-bg: #edfbf0;
+    --incorrect: #e85b5b;
+    --incorrect-bg: #fef0f0;
+    --topic1: #c7deff;
+    --topic1-strong: #5b9bd5;
+    --topic2: #f3dcfb;
+    --topic2-strong: #b07cc8;
+    --topic3: #fce4be;
+    --topic3-strong: #ff9764;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 17px; height: 100%; }
+  body {
+    font-family: var(--font-body); color: var(--text);
+    background: var(--bg-dark); line-height: 1.7; -webkit-font-smoothing: antialiased;
+    height: 100%; overflow: hidden; display: flex;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 220px; min-width: 220px; background: #1e1610;
+    border-right: 1px solid #3a2e22; display: flex; flex-direction: column;
+    height: 100vh; padding: 1.25rem 0; overflow-y: auto;
+  }
+  .sidebar-header {
+    padding: 0 1rem 1rem; border-bottom: 1px solid #3a2e22; margin-bottom: 0.75rem;
+  }
+  .sidebar-header h1 {
+    font-family: var(--font-display); font-size: 1.15rem; font-weight: 400;
+    color: var(--accent); line-height: 1.3; margin-bottom: 0.15rem;
+  }
+  .sidebar-header .subtitle {
+    font-size: 0.62rem; color: #8a7d6b; font-weight: 500;
+  }
+  .sidebar-progress {
+    padding: 0 1rem; margin-bottom: 1rem;
+  }
+  .sidebar-progress-label {
+    font-size: 0.58rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: #8a7d6b; margin-bottom: 0.3rem;
+  }
+  .sidebar-progress-bar {
+    background: #3a2e22; height: 5px; border-radius: 3px; overflow: hidden;
+  }
+  .sidebar-progress-fill {
+    height: 100%; background: var(--accent-strong); width: 0%; transition: width 0.4s ease;
+    border-radius: 3px;
+  }
+  .sidebar-progress-text {
+    font-size: 0.6rem; color: #8a7d6b; margin-top: 0.25rem; text-align: right;
+  }
+  .nav-section {
+    padding: 0 0.75rem; margin-bottom: 0.75rem;
+  }
+  .nav-section-label {
+    font-size: 0.58rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; padding: 0 0.25rem; margin-bottom: 0.4rem;
+  }
+  .nav-section-label.t1 { color: var(--topic1-strong); }
+  .nav-section-label.t2 { color: var(--topic2-strong); }
+  .nav-section-label.t3 { color: var(--topic3-strong); }
+  .nav-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;
+  }
+  .q-nav-btn {
+    width: 100%; aspect-ratio: 1; border-radius: 6px;
+    border: 2px solid #3a2e22; background: none;
+    font-family: var(--font-body); font-size: 0.7rem; font-weight: 700;
+    color: #6b5e4e; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s; position: relative;
+  }
+  .q-nav-btn:hover { border-color: var(--accent-strong); color: var(--accent); }
+  .q-nav-btn.current {
+    border-color: var(--accent-strong); background: var(--accent-strong);
+    color: #fff;
+  }
+  .q-nav-btn.answered {
+    border-color: var(--correct); background: rgba(74,190,106,0.15); color: var(--correct);
+  }
+  .q-nav-btn.answered.current {
+    background: var(--correct); color: #fff;
+  }
+  .nav-results-wrap { padding: 0.75rem 1rem; margin-top: auto; }
+  .q-nav-results {
+    display: none; width: 100%; padding: 0.6rem 1rem;
+    font-family: var(--font-body); font-size: 0.75rem; font-weight: 700;
+    color: #fff; background: var(--accent-strong); border: none; border-radius: 100px;
+    cursor: pointer; transition: all 0.15s; text-align: center;
+  }
+  .q-nav-results.show { display: block; }
+  .q-nav-results:hover { opacity: 0.9; }
+
+  /* ── MAIN PANEL ── */
+  .main-panel {
+    flex: 1; height: 100vh; overflow-y: auto; background: var(--bg);
+  }
+
+  /* ── QUESTION CARD ── */
+  .card {
+    display: none; padding: 2.5rem 3.5rem 4rem;
+    max-width: 860px;
+  }
+  .card.active { display: block; }
+
+  .q-meta {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 1rem; font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .q-number { color: var(--text-light); }
+  .q-topic {
+    padding: 0.25em 0.75em; border-radius: 100px; font-size: 0.68rem;
+  }
+  .q-topic.t1 { background: var(--topic1); color: #1a3a5c; }
+  .q-topic.t2 { background: var(--topic2); color: #4a2060; }
+  .q-topic.t3 { background: var(--topic3); color: #5c3a1a; }
+
+  .q-text {
+    font-family: var(--font-display); font-size: 1.1rem; font-weight: 400;
+    line-height: 1.5; margin-bottom: 1.5rem;
+  }
+
+  /* ── ANSWER OPTIONS ── */
+  .options { display: flex; flex-direction: column; gap: 0.6rem; }
+  .option-btn {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    width: 100%; padding: 1rem 1.25rem; border: 2px solid var(--border);
+    border-radius: 10px; background: var(--bg); cursor: pointer;
+    font-family: var(--font-body); font-size: 0.92rem; line-height: 1.5;
+    text-align: left; transition: all 0.15s; color: var(--text);
+  }
+  .option-btn:hover:not(.locked) { border-color: var(--accent-strong); background: var(--accent-bg); }
+  .option-btn .opt-letter {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg-soft); font-weight: 700; font-size: 0.78rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .option-btn.selected { border-color: var(--accent-strong); background: var(--accent-bg); }
+  .option-btn.selected .opt-letter { background: var(--accent-strong); color: #fff; }
+  .option-btn.correct { border-color: var(--correct); background: var(--correct-bg); }
+  .option-btn.correct .opt-letter { background: var(--correct); color: #fff; }
+  .option-btn.incorrect { border-color: var(--incorrect); background: var(--incorrect-bg); }
+  .option-btn.incorrect .opt-letter { background: var(--incorrect); color: #fff; }
+  .option-btn.locked { cursor: default; opacity: 0.6; }
+  .option-btn.correct.locked, .option-btn.incorrect.locked { opacity: 1; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    margin-top: 1.25rem; padding: 1rem 1.25rem; border-radius: 8px;
+    font-size: 0.88rem; line-height: 1.55; display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct { background: var(--correct-bg); border-left: 4px solid var(--correct); }
+  .feedback.incorrect { background: var(--incorrect-bg); border-left: 4px solid var(--incorrect); }
+  .feedback strong { font-weight: 700; }
+
+  /* ── NEXT BUTTON ── */
+  .next-btn {
+    display: none; margin-top: 1.5rem; padding: 0.8rem 2rem;
+    font-family: var(--font-body); font-size: 0.88rem; font-weight: 700;
+    color: var(--text-on-dark); background: var(--bg-dark); border: none;
+    border-radius: 100px; cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  }
+  .next-btn.show { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .next-btn:hover { background: #2e2218; transform: translateY(-1px); }
+
+  /* ── STRATIGRAPHY HOTSPOT ── */
+  .strat-wrap { margin: 0 auto 1.5rem; max-width: 560px; }
+  .strat-img-wrap { position: relative; overflow: hidden; border-radius: 8px; }
+  .strat-img { width: 122%; display: block; }
+  .strat-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+  .strat-layer {
+    position: absolute; left: 0; width: 100%; cursor: pointer;
+    border: 3px solid transparent; border-radius: 0;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .strat-layer:hover:not(.locked) { border-color: var(--accent-strong); background: rgba(255,151,100,0.18); }
+  .strat-layer.locked { cursor: default; }
+  .strat-layer.locked:hover { background: none; border-color: transparent; }
+  .strat-layer.hl-correct { border-color: var(--correct); background: rgba(74,190,106,0.3); }
+  .strat-layer.hl-correct.locked:hover { border-color: var(--correct); background: rgba(74,190,106,0.3); }
+  .strat-layer.hl-incorrect { border-color: var(--incorrect); background: rgba(232,91,91,0.3); }
+  .strat-layer.hl-incorrect.locked:hover { border-color: var(--incorrect); background: rgba(232,91,91,0.3); }
+  .strat-hint {
+    text-align: center; font-size: 0.78rem; color: var(--text-light);
+    font-weight: 500; margin-top: 0.5rem;
+  }
+  .strat-credit {
+    text-align: center; font-size: 0.6rem; color: var(--text-light);
+    margin-top: 0.25rem;
+  }
+  .strat-credit a { color: var(--text-light); }
+
+  /* ── MATCHING ACTIVITY ── */
+  .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem 1.25rem; margin-bottom: 0.5rem; }
+  .match-col-label {
+    font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--text-light); margin-bottom: 0.35rem;
+  }
+  .match-term, .match-def {
+    display: flex; align-items: center; gap: 0.6rem;
+    padding: 0.65rem 0.85rem; border: 2px solid var(--border); border-radius: 8px;
+    font-size: 0.82rem; line-height: 1.4; cursor: pointer;
+    transition: all 0.15s; margin-bottom: 0.4rem; min-height: 2.8rem;
+  }
+  .match-term:hover:not(.locked) { border-color: var(--accent-strong); background: var(--accent-bg); }
+  .match-def:hover:not(.locked) { border-color: var(--accent-strong); }
+  .match-term.selected { border-color: var(--accent-strong); background: var(--accent-bg); box-shadow: 0 0 0 2px rgba(255,151,100,0.2); }
+  .match-term.locked, .match-def.locked { cursor: default; }
+  .match-num {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+    font-size: 0.68rem; font-weight: 800; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .match-num-slot {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+    border: 2px dashed var(--border); font-size: 0.68rem; font-weight: 800; color: #fff;
+    display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+  }
+  .match-num-slot.active { border: none; }
+  .match-def.paired { border-color: #bbb; }
+  .match-def.match-correct { border-color: var(--correct); background: var(--correct-bg); }
+  .match-def.match-incorrect { border-color: var(--incorrect); background: var(--incorrect-bg); }
+  .match-check-btn {
+    display: none; margin-top: 1rem; padding: 0.7rem 1.5rem;
+    font-family: var(--font-body); font-size: 0.85rem; font-weight: 700;
+    color: var(--text-on-dark); background: var(--accent-strong); border: none;
+    border-radius: 100px; cursor: pointer; transition: all 0.2s;
+  }
+  .match-check-btn.show { display: inline-block; }
+  .match-check-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .match-hint {
+    font-size: 0.78rem; color: var(--text-light); font-weight: 500; margin-bottom: 1rem;
+  }
+  @media (max-width: 600px) {
+    .match-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── QUESTION IMAGE ── */
+  .q-image {
+    width: 100%; max-width: 420px; border-radius: 8px; margin-bottom: 0.4rem;
+    display: block; box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  }
+  .q-image-credit {
+    font-size: 0.58rem; color: var(--text-light); margin-bottom: 1.25rem;
+  }
+  .q-image-credit a { color: var(--text-light); }
+
+  /* ── MULTI-SELECT ── */
+  .evidence-card {
+    background: var(--bg-soft); border-radius: var(--radius);
+    padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;
+    font-size: 0.92rem; line-height: 1.65;
+  }
+  .evidence-card .ev-label {
+    font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--accent-strong); margin-bottom: 0.5rem;
+  }
+  .ms-hint {
+    font-size: 0.78rem; color: var(--text-light); font-weight: 500; margin-bottom: 0.75rem;
+  }
+  .ms-option {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    width: 100%; padding: 0.85rem 1rem; border: 2px solid var(--border);
+    border-radius: 10px; background: var(--bg); cursor: pointer;
+    font-family: var(--font-body); font-size: 0.88rem; line-height: 1.5;
+    text-align: left; transition: all 0.15s; color: var(--text);
+    margin-bottom: 0.45rem;
+  }
+  .ms-option:hover:not(.locked) { border-color: var(--accent-strong); background: var(--accent-bg); }
+  .ms-check {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 4px;
+    border: 2px solid var(--border); background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 800; color: transparent; transition: all 0.15s;
+  }
+  .ms-option.selected .ms-check {
+    background: var(--accent-strong); border-color: var(--accent-strong); color: #fff;
+  }
+  .ms-option.ms-correct { border-color: var(--correct); background: var(--correct-bg); }
+  .ms-option.ms-correct .ms-check { background: var(--correct); border-color: var(--correct); color: #fff; }
+  .ms-option.ms-incorrect { border-color: var(--incorrect); background: var(--incorrect-bg); }
+  .ms-option.ms-incorrect .ms-check { background: var(--incorrect); border-color: var(--incorrect); color: #fff; }
+  .ms-option.ms-missed { border-color: var(--correct); border-style: dashed; }
+  .ms-option.locked { cursor: default; }
+  .ms-check-btn {
+    display: none; margin-top: 1rem; padding: 0.7rem 1.5rem;
+    font-family: var(--font-body); font-size: 0.85rem; font-weight: 700;
+    color: var(--text-on-dark); background: var(--accent-strong); border: none;
+    border-radius: 100px; cursor: pointer; transition: all 0.2s;
+  }
+  .ms-check-btn.show { display: inline-block; }
+  .ms-check-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* ── SOURCE BOX ── */
+  .source-box {
+    background: var(--bg-soft); border-left: 4px solid var(--accent-strong);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;
+  }
+  .source-box .source-label {
+    font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--accent-strong); margin-bottom: 0.5rem;
+  }
+  .source-box blockquote {
+    font-family: var(--font-display); font-size: 1rem; font-style: italic;
+    line-height: 1.6; color: var(--text); margin: 0 0 0.5rem;
+  }
+  .source-box .source-attr {
+    font-size: 0.78rem; color: var(--text-light); font-weight: 500;
+  }
+
+  /* ── CLOZE PASSAGE ── */
+  .cloze-passage {
+    font-size: 0.98rem; line-height: 2.4;
+    padding: 1.5rem 2rem; background: var(--bg-soft); border-radius: var(--radius);
+    margin-bottom: 1rem;
+  }
+  .cloze-blank {
+    font-family: var(--font-body); font-size: 0.82rem; font-weight: 600;
+    padding: 0.2rem 0.4rem; margin: 0 0.1rem;
+    border: none; border-bottom: 2.5px solid var(--accent-strong);
+    border-radius: 0; background: transparent; color: var(--text);
+    cursor: pointer; min-width: 10ch;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .cloze-blank:focus { outline: none; border-bottom-color: var(--bg-dark); background: var(--accent-bg); }
+  .cloze-blank.correct { border-bottom-color: var(--correct); background: var(--correct-bg); }
+  .cloze-blank.incorrect { border-bottom-color: var(--incorrect); background: var(--incorrect-bg); }
+  .cloze-blank.locked { pointer-events: none; }
+  .cloze-check-btn {
+    display: none; margin-top: 1rem; padding: 0.7rem 1.5rem;
+    font-family: var(--font-body); font-size: 0.85rem; font-weight: 700;
+    color: var(--text-on-dark); background: var(--accent-strong); border: none;
+    border-radius: 100px; cursor: pointer; transition: all 0.2s;
+  }
+  .cloze-check-btn.show { display: inline-block; }
+  .cloze-check-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* ── PEEL LABEL ── */
+  .peel-sentences { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+  .peel-sentence {
+    display: flex; gap: 0.75rem; align-items: flex-start;
+    padding: 0.85rem 1rem; border: 2px solid var(--border); border-radius: 8px;
+    font-size: 0.88rem; line-height: 1.5; transition: border-color 0.2s, background 0.2s;
+  }
+  .peel-sentence.peel-correct { border-color: var(--correct); background: var(--correct-bg); }
+  .peel-sentence.peel-incorrect { border-color: var(--incorrect); background: var(--incorrect-bg); }
+  .peel-label-btn {
+    flex-shrink: 0; width: 38px; height: 38px; border-radius: 50%;
+    border: 2px solid var(--border); background: var(--bg-soft);
+    font-family: var(--font-body); font-weight: 800; font-size: 0.78rem;
+    color: var(--text-light); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .peel-label-btn:hover:not(.locked) { border-color: var(--accent-strong); }
+  .peel-label-btn.locked { cursor: default; }
+  .peel-label-btn[data-val="P"] { background: #c7deff; border-color: #5b9bd5; color: #1a3a5c; }
+  .peel-label-btn[data-val="E"] { background: #fce4be; border-color: #e8943a; color: #5c3a1a; }
+  .peel-label-btn[data-val="L"] { background: #f3dcfb; border-color: #b07cc8; color: #4a2060; }
+  .peel-check-btn {
+    display: none; margin-top: 1rem; padding: 0.7rem 1.5rem;
+    font-family: var(--font-body); font-size: 0.85rem; font-weight: 700;
+    color: var(--text-on-dark); background: var(--accent-strong); border: none;
+    border-radius: 100px; cursor: pointer; transition: all 0.2s;
+  }
+  .peel-check-btn.show { display: inline-block; }
+  .peel-check-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .peel-correct-label {
+    font-size: 0.7rem; font-weight: 700; color: var(--correct); margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* ── PEEL ORDER ── */
+  .peel-order-item {
+    display: flex; gap: 0.5rem; align-items: center;
+    padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 8px;
+    margin-bottom: 0.4rem; font-size: 0.88rem; line-height: 1.5;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .peel-order-item.peel-correct { border-color: var(--correct); background: var(--correct-bg); }
+  .peel-order-item.peel-incorrect { border-color: var(--incorrect); background: var(--incorrect-bg); }
+  .peel-pos {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--bg-soft); font-weight: 800; font-size: 0.7rem;
+    color: var(--text-light); display: flex; align-items: center; justify-content: center;
+  }
+  .peel-arrows { display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
+  .peel-arrow-btn {
+    width: 26px; height: 20px; border: 1.5px solid var(--border); border-radius: 4px;
+    background: var(--bg); cursor: pointer; font-size: 0.65rem;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-body); color: var(--text-light); transition: all 0.15s;
+  }
+  .peel-arrow-btn:hover { border-color: var(--accent-strong); color: var(--text); }
+  .peel-arrow-btn.locked { cursor: default; opacity: 0.3; }
+
+  /* ── SPLASH / ENTER PAGE ── */
+  .splash {
+    position: fixed; inset: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg-dark);
+  }
+  .splash.hidden { display: none; }
+  .splash-inner {
+    position: relative; width: 100%; height: 100%;
+    display: flex; align-items: flex-end; justify-content: center;
+  }
+  .splash-img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+  }
+  .splash-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(30,22,16,0.95) 0%, rgba(30,22,16,0.4) 40%, transparent 70%);
+  }
+  .splash-content {
+    position: relative; z-index: 1; text-align: center;
+    padding: 2rem 2rem 3.5rem; max-width: 600px;
+  }
+  .splash-title {
+    font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 400; color: var(--accent); line-height: 1.2; margin-bottom: 0.4rem;
+  }
+  .splash-sub {
+    font-size: clamp(0.78rem, 1.5vw, 0.92rem); color: #c4b49e;
+    font-weight: 500; margin-bottom: 1.5rem; line-height: 1.5;
+  }
+  .splash-btn {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 1rem 2.5rem; font-family: var(--font-body); font-size: 1rem;
+    font-weight: 700; color: var(--bg-dark); background: var(--accent);
+    border: none; border-radius: 100px; cursor: pointer;
+    box-shadow: 0 6px 24px rgba(249,214,175,0.3); transition: all 0.2s;
+  }
+  .splash-btn:hover { background: #fce4be; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(249,214,175,0.4); }
+  .splash-btn .arrow { font-size: 1.2rem; }
+  .splash-meta {
+    font-size: 0.68rem; color: #8a7d6b; margin-top: 1rem;
+  }
+
+  /* ── RESULTS SCREEN ── */
+  .results { display: none; text-align: center; }
+  .results.active { display: block; }
+  .results h2 {
+    font-family: var(--font-display); font-size: 1.6rem; font-weight: 400;
+    margin-bottom: 0.5rem;
+  }
+  .score-big {
+    font-size: 3.5rem; font-weight: 800; color: var(--accent-strong);
+    margin: 0.5rem 0;
+  }
+  .score-label { font-size: 0.85rem; color: var(--text-light); margin-bottom: 2rem; }
+
+  .topic-scores {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;
+    margin-bottom: 2rem; text-align: center;
+  }
+  .topic-score-card {
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.25rem 1rem;
+  }
+  .topic-score-card .ts-label {
+    font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 0.25rem;
+  }
+  .topic-score-card .ts-label.t1 { color: var(--topic1-strong); }
+  .topic-score-card .ts-label.t2 { color: var(--topic2-strong); }
+  .topic-score-card .ts-label.t3 { color: var(--topic3-strong); }
+  .topic-score-card .ts-value {
+    font-size: 1.8rem; font-weight: 800;
+  }
+  .topic-score-card .ts-total { font-size: 0.78rem; color: var(--text-light); }
+
+  .copy-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.8rem 2rem; font-family: var(--font-body); font-size: 0.88rem;
+    font-weight: 700; color: var(--text-on-dark); background: var(--bg-dark);
+    border: none; border-radius: 100px; cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12); margin-bottom: 1rem;
+  }
+  .copy-btn:hover { background: #2e2218; transform: translateY(-1px); }
+  .copy-btn.copied { background: var(--correct); }
+
+  .restart-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.7rem 1.5rem; font-family: var(--font-body); font-size: 0.82rem;
+    font-weight: 600; color: var(--text-light); background: none;
+    border: 2px solid var(--border); border-radius: 100px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .restart-btn:hover { border-color: var(--text-light); color: var(--text); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .sidebar { width: 64px; min-width: 64px; padding: 0.75rem 0; }
+    .sidebar-header { display: none; }
+    .sidebar-progress { display: none; }
+    .nav-section-label { font-size: 0; padding: 0; margin: 0.25rem 0; text-align: center; }
+    .nav-section-label::after {
+      font-size: 0.5rem; display: block;
+    }
+    .nav-section-label.t1::after { content: 'S&S'; color: var(--topic1-strong); }
+    .nav-section-label.t2::after { content: 'Auth'; color: var(--topic2-strong); }
+    .nav-section-label.t3::after { content: 'HR'; color: var(--topic3-strong); }
+    .nav-section { padding: 0 0.35rem; }
+    .nav-grid { grid-template-columns: repeat(2, 1fr); gap: 3px; }
+    .q-nav-btn { font-size: 0.6rem; border-radius: 4px; }
+    .nav-results-wrap { padding: 0.5rem 0.35rem; }
+    .q-nav-results { font-size: 0.6rem; padding: 0.5rem; }
+    .card { padding: 1.5rem 1.25rem 3rem; }
+    .topic-scores { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH PAGE -->
+<div class="splash" id="splashPage">
+  <div class="splash-inner">
+    <img class="splash-img" src="quiz-hero.png" alt="Can You Dig It? — archaeology-themed quiz illustration">
+    <div class="splash-overlay"></div>
+    <div class="splash-content">
+      <div class="splash-title">The Nature of Ancient History</div>
+      <div class="splash-sub">40 questions across Sites &amp; Sources, Authentication, and Human Remains. Multiple choice, true/false, image identification, matching, and interactive stratigraphy.</div>
+      <button class="splash-btn" onclick="enterQuiz()">Enter Quiz <span class="arrow">&rarr;</span></button>
+      <div class="splash-meta">Year 11 Ancient History &middot; Revision</div>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar" style="display:none;"
+  <div class="sidebar-header">
+    <h1>Can You Dig It?</h1>
+    <div class="subtitle">Year 11 Revision &middot; 35 Questions</div>
+  </div>
+  <div class="sidebar-progress">
+    <div class="sidebar-progress-label">Progress</div>
+    <div class="sidebar-progress-bar"><div class="sidebar-progress-fill" id="progressBar"></div></div>
+    <div class="sidebar-progress-text" id="progressText">0 / 35</div>
+  </div>
+  <div id="qNav"></div>
+  <div class="nav-results-wrap">
+    <button class="q-nav-results" id="navResultsBtn" onclick="showResults()">See Results &rarr;</button>
+  </div>
+</aside>
+
+<!-- MAIN PANEL -->
+<div class="main-panel" id="mainPanel" style="display:none;"
+  <!-- Questions are generated by JS -->
+  <div id="quizArea"></div>
+
+  <!-- Results -->
+  <div class="card results" id="resultsCard">
+    <h2>Quiz Complete</h2>
+    <div class="score-big" id="scoreBig"></div>
+    <div class="score-label" id="scoreLabel"></div>
+    <div class="topic-scores">
+      <div class="topic-score-card">
+        <div class="ts-label t1">Sites &amp; Sources</div>
+        <div class="ts-value" id="score1"></div>
+        <div class="ts-total">out of 14</div>
+      </div>
+      <div class="topic-score-card">
+        <div class="ts-label t2">Authentication</div>
+        <div class="ts-value" id="score2"></div>
+        <div class="ts-total">out of 10</div>
+      </div>
+      <div class="topic-score-card">
+        <div class="ts-label t3">Human Remains</div>
+        <div class="ts-value" id="score3"></div>
+        <div class="ts-total">out of 16</div>
+      </div>
+    </div>
+    <button class="copy-btn" id="copyBtn" onclick="copyResults()">Copy results to clipboard</button>
+    <br>
+    <button class="restart-btn" onclick="restartQuiz()">Try again</button>
+  </div>
+</div>
+
+<script>
+var questions = [
+  // ── OPTION 1: Investigation of Ancient Sites and Sources (10) ──
+  {
+    topic: 1, topicName: "Sites & Sources",
+    text: "What is the key difference between an archaeologist and a historian?",
+    options: [
+      "Archaeologists study more recent events than historians",
+      "Historians work primarily with physical remains and artefacts",
+      "Archaeologists work primarily with physical remains; historians work primarily with written sources",
+      "There is no meaningful difference between the two disciplines"
+    ],
+    answer: 2,
+    explanation: "Archaeologists study the physical evidence of the past (artefacts, sites, remains), while historians focus primarily on written and documentary sources."
+  },
+  {
+    topic: 1, topicName: "Sites & Sources",
+    text: "True or False: Removing an artefact from an archaeological site without recording its context destroys historical information.",
+    options: ["True", "False"],
+    answer: 0,
+    explanation: "Context \u2014 the position, layer, and relationship of an artefact to its surroundings \u2014 is essential. Once removed without recording, that information is permanently lost."
+  },
+  {
+    topic: 1, topicName: "Sites & Sources",
+    text: "Which scientific dating method measures the decay of carbon-14 in organic material?",
+    options: [
+      "Dendrochronology",
+      "Thermoluminescence",
+      "Radiocarbon dating",
+      "Spectroscopic analysis"
+    ],
+    answer: 2,
+    explanation: "Radiocarbon (C-14) dating measures the decay of carbon-14 in organic material. It is effective for remains up to approximately 50,000 years old."
+  },
+  {
+    topic: 1, topicName: "Sites & Sources",
+    type: "hotspot",
+    text: "This diagram shows a stratigraphic profile with artefacts from different time periods. According to the principle of superposition, click the stratum that contains the OLDEST artefacts.",
+    answer: 4,
+    explanation: "Stratum E is the deepest layer and therefore the oldest. It contains pottery fragments, a bone awl, a stone arrow point, and a basket fragment \u2014 all ancient artefacts. The principle of superposition tells us that deeper layers were deposited first."
+  },
+  {
+    topic: 1, topicName: "Sites & Sources",
+    type: "matching",
+    text: "Match each archaeological term to its correct definition.",
+    pairs: [
+      { term: "Stratigraphy", def: "The study of layers deposited over time at a site" },
+      { term: "Context", def: "The position and relationship of an artefact to its surroundings" },
+      { term: "Dendrochronology", def: "Dating method using tree-ring growth patterns" },
+      { term: "Inference", def: "A conclusion drawn from evidence, not directly observed" },
+      { term: "Iconography", def: "The study and interpretation of images and symbols" },
+      { term: "Thermoluminescence", def: "Dating method that measures light released from heated materials" }
+    ],
+    explanation: "These are core terms from Option 1. Knowing precise definitions helps you use them accurately in extended responses."
+  },
+  {
+    topic: 1, topicName: "Sites & Sources",
+    type: "hotspot",
+    text: "Which stratum is a NATURAL deposit with no evidence of human activity? Click to select.",
+    answer: 3,
+    explanation: "Stratum D is a natural sand and gravel deposit with no artefacts. It separates the historical layers above from the ancient layers below. Natural deposits like this help archaeologists identify breaks in human occupation at a site."
+  },
+  {
+    topic: 1, topicName: "Sites & Sources",
+    type: "hotspot",
+    text: "Stratum A contains a car licence plate and Stratum E contains pottery fragments. Click the YOUNGER stratum.",
+    answer: 0,
+    explanation: "Stratum A is the uppermost layer, so it was deposited most recently and is the youngest. The car licence plate and other modern debris confirm it is recent. The principle of superposition tells us that upper layers are always younger than the layers beneath them."
+  },
+
+  // ── OPTION 1 continued: Pioneers of Archaeology (5) ──
+  {
+    topic: 1, topicName: "Sites & Sources",
+    text: "Which of the following correctly orders the development of archaeological methods from earliest to latest?",
+    options: [
+      "Wheeler\u2019s grid system \u2192 Petrie\u2019s seriation \u2192 Fiorelli\u2019s methods",
+      "Treasure hunting \u2192 Fiorelli\u2019s methods \u2192 Petrie\u2019s seriation \u2192 Wheeler\u2019s grid system",
+      "Petrie\u2019s seriation \u2192 Treasure hunting \u2192 Fiorelli\u2019s methods",
+      "Fiorelli\u2019s methods \u2192 Wheeler\u2019s grid system \u2192 Petrie\u2019s seriation"
+    ],
+    answer: 1,
+    explanation: "The correct chronological order is: treasure hunting (pre-19th century), Fiorelli\u2019s systematic methods at Pompeii, Petrie\u2019s seriation in Egypt (1890s), and finally Wheeler\u2019s grid system. Each built upon the advances of the previous generation."
+  },
+  {
+    topic: 1, topicName: "Sites & Sources",
+    text: "Giuseppe Fiorelli\u2019s most significant contribution at Pompeii was:",
+    options: [
+      "Discovering the city of Pompeii for the first time",
+      "Inventing the plaster cast technique to preserve the forms of victims",
+      "Using radiocarbon dating to determine the date of the eruption",
+      "Removing all artefacts to a museum in Rome for safekeeping"
+    ],
+    answer: 1,
+    explanation: "Fiorelli poured plaster into the cavities left by decomposed bodies in the volcanic ash, preserving victims\u2019 postures, clothing, and even facial expressions. He also applied stratigraphy and careful recording, transforming Pompeii from a looted ruin into a vivid portrait of Roman daily life."
+  },
+  {
+    topic: 1, topicName: "Sites & Sources",
+    text: "Sir Flinders Petrie pioneered the technique of seriation at Naqada in Egypt. Seriation involves:",
+    options: [
+      "Using chemical tests to determine the age of pottery fragments",
+      "Ordering pottery styles by similarity to create a relative timeline",
+      "Counting the number of artefacts found in each layer of excavation",
+      "Photographing artefacts from multiple angles for digital reconstruction"
+    ],
+    answer: 1,
+    explanation: "At Naqada in the 1890s, Petrie excavated over 2,000 graves. Because stratigraphy was difficult at the site, he arranged all artefacts in typological sequences \u2014 ordering pottery by similarity so earlier forms changed gradually into later ones. This provided the first insights into pre-dynastic Egypt."
+  },
+  {
+    topic: 1, topicName: "Sites & Sources",
+    text: "Sir Mortimer Wheeler revolutionised archaeological fieldwork by introducing:",
+    options: [
+      "The use of dynamite to quickly expose buried structures",
+      "Radiocarbon dating for determining absolute dates",
+      "The grid system with baulks left between trenches for stratigraphic study",
+      "The use of aerial photography to locate buried sites"
+    ],
+    answer: 2,
+    explanation: "Wheeler divided excavation sites into squares (a grid system) and left soil walls called \u2018baulks\u2019 between trenches. These baulks allowed archaeologists to study stratigraphy in cross-section, ensuring every find could be precisely located. This method became the standard in field archaeology."
+  },
+  {
+    topic: 1, topicName: "Sites & Sources",
+    text: "Christian Jurgensen Thomsen\u2019s Three-Age System (1836) organised artefacts into:",
+    options: [
+      "Ancient, Medieval, and Modern periods",
+      "Stone Age, Bronze Age, and Iron Age",
+      "Palaeolithic, Mesolithic, and Neolithic periods",
+      "Egyptian, Greek, and Roman civilisations"
+    ],
+    answer: 1,
+    explanation: "Thomsen organised the Danish National Museum\u2019s collection into Stone Age (stone tools), Bronze Age (copper and tin tools), and Iron Age (iron tools and weapons). This was the first scientific system for ordering artefacts chronologically and was adopted across Europe and beyond."
+  },
+
+  // ── OPTION 1 continued: PEEL Structure (2) ──
+  {
+    topic: 1, topicName: "Sites & Sources",
+    type: "peel-label",
+    text: "Read this paragraph and label each sentence as Point (P), Evidence (E), Explain (E), or Link (L). Click the circle to change its label.",
+    sentences: [
+      { text: "This technique allows archaeologists to move beyond relative dating and establish precise chronological frameworks, transforming assumptions into verified timelines.", label: "E" },
+      { text: "Without such methods, our understanding of ancient civilisations would remain speculative, demonstrating that science is essential to archaeological inquiry.", label: "L" },
+      { text: "Radiocarbon dating, developed in the 1940s, measures the decay of carbon-14 in organic material and can date remains up to approximately 50,000 years old.", label: "E" },
+      { text: "Scientific dating methods have significantly enhanced our understanding of the ancient past.", label: "P" }
+    ],
+    explanation: "Point states the argument. Evidence provides specific facts (radiocarbon dating, C-14, 50,000 years). Explain interprets the evidence \u2014 answering \u2018so what?\u2019. Link returns to the question and advances the argument. Both E sentences serve different roles: one gives facts, the other explains their significance."
+  },
+  {
+    topic: 1, topicName: "Sites & Sources",
+    type: "peel-order",
+    text: "These four sentences form a PEEL paragraph about Wheeler\u2019s grid system, but they are out of order. Use the arrows to rearrange them into the correct P\u2013E\u2013E\u2013L structure.",
+    sentences: [
+      { text: "Sir Mortimer Wheeler\u2019s grid system revolutionised the way archaeological sites are excavated." },
+      { text: "By dividing sites into squares and leaving soil walls called baulks between trenches, Wheeler ensured that stratigraphic layers could be studied in cross-section at every point across a site." },
+      { text: "This method meant that every artefact could be precisely located within its layer, preserving the contextual relationships that earlier methods had destroyed." },
+      { text: "Wheeler\u2019s innovation established the standard for modern fieldwork, proving that controlled, systematic excavation is essential for reliable historical interpretation." }
+    ],
+    explanation: "The correct PEEL order: (P) States Wheeler\u2019s contribution. (E) Provides specific evidence \u2014 the grid, squares, baulks, cross-sections. (E) Explains why this matters \u2014 precise location, preserved context. (L) Links back to the broader argument about scientific excavation."
+  },
+
+  // ── OPTION 2: Historical Authentication and Reliability (10) ──
+  {
+    topic: 2, topicName: "Authentication",
+    text: "What does \u2018provenance\u2019 mean in the context of historical authentication?",
+    options: [
+      "The price paid for an artefact at auction",
+      "The documented history of ownership and origin of an artefact",
+      "The scientific dating of an artefact",
+      "The opinion of an expert about an artefact\u2019s value"
+    ],
+    answer: 1,
+    explanation: "Provenance refers to the documented chain of custody and origin of an artefact. Gaps in provenance are a red flag for potential forgery or looting."
+  },
+  {
+    topic: 2, topicName: "Authentication",
+    text: "True or False: An anachronism is something placed in the wrong time period, such as a modern material found in an artefact claimed to be ancient.",
+    options: ["True", "False"],
+    answer: 0,
+    explanation: "Correct. Anachronisms \u2014 details that belong to a different time period \u2014 are one of the key indicators that a source may not be authentic."
+  },
+  {
+    topic: 2, topicName: "Authentication",
+    type: "cloze",
+    text: "Fill in the blanks to complete the passage about the Piltdown Man hoax.",
+    blanks: [
+      { answer: "1912", options: ["1895", "1912", "1935"] },
+      { answer: "Charles Dawson", options: ["Arthur Conan Doyle", "Charles Dawson", "Pierre Teilhard de Chardin"] },
+      { answer: "Sussex", options: ["Cornwall", "Sussex", "Yorkshire"] },
+      { answer: "40", options: ["10", "25", "40"] },
+      { answer: "600", options: ["600", "6,000", "60,000"] },
+      { answer: "orang-utan", options: ["chimpanzee", "orang-utan", "gorilla"] }
+    ],
+    passage: "In {{0}}, amateur archaeologist {{1}} claimed to have found skull fragments and an ape-like jawbone in a gravel pit in {{2}}, England. The discovery was believed to be a 500,000-year-old human ancestor \u2014 the so-called \u2018missing link.\u2019 For over {{3}} years, the find was accepted by the scientific community. When the hoax was finally exposed, tests revealed the skull was only about {{4}} years old, while the jawbone came from a modern {{5}}. Both had been deliberately stained with pigment to appear ancient.",
+    explanation: "The Piltdown Man is one of history\u2019s most famous scientific frauds. Charles Dawson planted the forgery in Sussex in 1912, and it was not exposed until 1953 \u2014 over 40 years later. The skull was human but only 600 years old, while the jawbone was from a modern orang-utan."
+  },
+  {
+    topic: 2, topicName: "Authentication",
+    text: "Which of the following is NOT a famous fake or forgery studied in this unit?",
+    options: [
+      "The Piltdown Man",
+      "The Turin Shroud",
+      "The Rosetta Stone",
+      "The Hitler Diaries"
+    ],
+    answer: 2,
+    explanation: "The Rosetta Stone is an authentic ancient artefact, not a forgery. It was carved in 196 BCE and is key to deciphering Egyptian hieroglyphics. The other three are all famous fakes or disputed objects."
+  },
+  {
+    topic: 2, topicName: "Authentication",
+    text: "Spectroscopic analysis helps authenticate artefacts by:",
+    options: [
+      "Comparing them to photographs of known authentic objects",
+      "Testing the chemical composition of materials like ink, paint, or metal",
+      "Using radiocarbon dating on the artefact\u2019s container",
+      "Translating ancient inscriptions found on the artefact"
+    ],
+    answer: 1,
+    explanation: "Spectroscopic analysis examines the chemical composition of materials. It can reveal whether inks, paints, or metals contain substances that were not available in the period an artefact claims to be from \u2014 exposing potential forgeries."
+  },
+  {
+    topic: 2, topicName: "Authentication",
+    text: "Which combination of scientific tests exposed the Piltdown Man hoax in 1953?",
+    options: [
+      "Radiocarbon dating and DNA analysis",
+      "Fluorine, uranium, and nitrogen (FUN) tests",
+      "CT scanning and isotope analysis",
+      "Spectroscopic analysis and thermoluminescence"
+    ],
+    answer: 1,
+    explanation: "FUN (fluorine, uranium, nitrogen) tests revealed the skull and jawbone were different ages. Microscopic examination also showed the teeth had been deliberately filed."
+  },
+  {
+    topic: 2, topicName: "Authentication",
+    text: "One key reason the Piltdown Man was believed for over 40 years was:",
+    options: [
+      "It was found by a respected university professor",
+      "The evidence was stored in a vault and could not be re-examined",
+      "Confirmation bias \u2014 scientists wanted to find a British \u2018missing link\u2019",
+      "DNA testing in the early 1900s confirmed it was genuine"
+    ],
+    answer: 2,
+    explanation: "Confirmation bias played a major role. British scientists were eager to find their own ancient ancestor to rival discoveries in France and Germany. National pride overrode scientific scepticism."
+  },
+  {
+    topic: 2, topicName: "Authentication",
+    text: "True or False: Ralph Glidden was a respected archaeologist who carefully excavated and preserved Native American grave-sites on Catalina Island.",
+    options: ["True", "False"],
+    answer: 1,
+    explanation: "False. Ralph Glidden looted 801 Native American grave-sites, used bones as building materials in his private museum, and sold the collection to the Heye Foundation."
+  },
+  {
+    topic: 2, topicName: "Authentication",
+    text: "Which of the following is NOT a known motivation for creating historical fakes or forgeries?",
+    options: [
+      "Financial gain",
+      "National pride",
+      "Desire for scientific fame",
+      "Improving public education"
+    ],
+    answer: 3,
+    explanation: "Common motivations include financial gain, nationalism, academic rivalry, personal glory, and the desire to prove a theory. Improving education is not a recognised motivation for forgery."
+  },
+  {
+    topic: 2, topicName: "Authentication",
+    type: "matching",
+    text: "Match each concept to its correct description or example.",
+    pairs: [
+      { term: "Confirmation bias", def: "Believing evidence because it supports existing assumptions" },
+      { term: "Anachronism", def: "A detail that belongs to a different time period" },
+      { term: "NAGPRA (1990)", def: "US law requiring return of Native American remains" },
+      { term: "FUN tests (1953)", def: "Scientific method that exposed the Piltdown Man hoax" },
+      { term: "Contestability", def: "Historical claims are always open to revision with new evidence" },
+      { term: "Repatriation", def: "Return of human remains to their community of origin" }
+    ],
+    explanation: "These concepts span all three options. Being able to connect terms to their meanings and examples is essential for extended response writing."
+  },
+
+  // ── OPTION 6: Treatment and Display of Human Remains (10) ──
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "This photograph shows one of the most recognisable bog bodies ever discovered. Which bog body is this?",
+    image: { src: "tollund-man.jpg", alt: "Close-up photograph of a remarkably preserved bog body face", credit: "" },
+    options: [
+      "Lindow Man",
+      "Grauballe Man",
+      "Tollund Man",
+      "Yde Girl"
+    ],
+    answer: 2,
+    explanation: "This is Tollund Man, discovered in a peat bog near Silkeborg, Denmark, in 1950. His remarkably peaceful expression and well-preserved facial features \u2014 including visible stubble and wrinkles \u2014 make him one of the most iconic bog bodies. He is now displayed at the Silkeborg Museum."
+  },
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "True or False: Bog bodies are preserved because peat bogs create anaerobic, acidic conditions where sphagnum moss and tannins prevent decay.",
+    options: ["True", "False"],
+    answer: 0,
+    explanation: "Correct. The combination of anaerobic (oxygen-free) conditions, acidity, and tannins from sphagnum moss preserves soft tissue remarkably well, while dissolving bone over time."
+  },
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "This bog body is displayed at the British Museum. Forensic analysis revealed that this person:",
+    image: { src: "lindow-man.jpg", alt: "Preserved bog body displayed on peat in a museum case", credit: "Lindow Man, British Museum. Photo: Mike Peel. <a href=\"https://creativecommons.org/licenses/by-sa/4.0\" target=\"_blank\">CC BY-SA 4.0</a>" },
+    options: [
+      "Died of natural causes and was buried in the bog",
+      "Suffered a blow to the head, was garrotted, and had his throat cut",
+      "Drowned accidentally while crossing the bog",
+      "Was killed by a single stab wound to the chest"
+    ],
+    answer: 1,
+    explanation: "This is Lindow Man, discovered in 1984 in a peat bog in Cheshire, England. Forensic analysis revealed a \u2018triple death\u2019: a blow to the head, garrotting (strangling with a cord), and a cut throat. Whether this was ritual sacrifice or execution remains one of the central debates in bog body studies."
+  },
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "Historian P.V. Glob argued that Tollund Man was likely:",
+    options: [
+      "A criminal executed for theft",
+      "A warrior killed in battle",
+      "A sacrifice to the fertility goddess Nerthus",
+      "A tribal leader who died of natural causes"
+    ],
+    answer: 2,
+    explanation: "P.V. Glob (1960s) argued Tollund Man was a ritual sacrifice to the fertility goddess Nerthus, drawing on Tacitus\u2019 description of northern European tribal practices in his work Germania."
+  },
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "This bog body, discovered in Denmark in 1952, had his throat cut from ear to ear. Analysis of his stomach contents revealed his last meal was primarily:",
+    image: { src: "grauballe-man.jpg", alt: "Full body view of a preserved bog body in a museum display", credit: "Grauballe Man, Moesgaard Museum. Photo: Sven Rosborn. <a href=\"https://creativecommons.org/licenses/by-sa/4.0\" target=\"_blank\">CC BY-SA 4.0</a>" },
+    options: [
+      "Meat and dairy products",
+      "Porridge made from grains and seeds",
+      "Fish and shellfish",
+      "Fruit and berries"
+    ],
+    answer: 1,
+    explanation: "This is Grauballe Man, discovered near the village of Grauballe, Denmark, in 1952. His throat had been cut from ear to ear. Analysis of his stomach contents revealed his last meal was a porridge made from various grains and seeds, including barley and other cereals \u2014 with no trace of meat or fresh fruit."
+  },
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "What does NAGPRA (1990) require?",
+    options: [
+      "All human remains in museums worldwide must be returned to their country of origin",
+      "US museums must return Native American remains and sacred objects to descendant communities",
+      "Museums must display human remains behind glass at all times",
+      "Archaeological excavation of burial sites is banned in the United States"
+    ],
+    answer: 1,
+    explanation: "The Native American Graves Protection and Repatriation Act (NAGPRA, 1990) legally compelled US museums and federal agencies to return Native American remains and sacred objects to descendant communities."
+  },
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "The skull cups found at Gough\u2019s Cave in Somerset are significant because they are:",
+    options: [
+      "The oldest known examples of human cremation",
+      "The oldest known skull cups ever discovered",
+      "Evidence of Roman religious practices in Britain",
+      "The first archaeological find to be dated using radiocarbon methods"
+    ],
+    answer: 1,
+    explanation: "The Gough\u2019s Cave skull cups (c. 14,700 years old) are the oldest known skull cups ever discovered. Three human skulls were deliberately shaped into drinking bowls."
+  },
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "True or False: Sociologist Tiffany Jenkins argued that museums should never display human remains under any circumstances.",
+    options: ["True", "False"],
+    answer: 1,
+    explanation: "False. Tiffany Jenkins actually argued the opposite \u2014 that museums were being \u2018over-sensitive\u2019 about displaying remains. An English Heritage survey found only 9% of the public opposed museum display of bones."
+  },
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "Which ethical framework argues that the rights of descendant communities should take priority over scientific research?",
+    options: [
+      "Utilitarian ethics",
+      "Scientific/epistemological ethics",
+      "Rights-based ethics",
+      "Archaeological ethics"
+    ],
+    answer: 2,
+    explanation: "Rights-based ethics holds that the rights of descendant communities \u2014 including cultural, spiritual, and legal rights \u2014 take priority. Utilitarian ethics focuses on the greatest benefit to the greatest number."
+  },
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "Pemulwuy was a Bidjigal warrior whose head was:",
+    options: [
+      "Preserved in a bog and discovered in 1965",
+      "Removed after his death in 1802, sent to Britain, and returned to Australia in 2018",
+      "Displayed at the British Museum until NAGPRA forced its return",
+      "Found in an unmarked grave and reburied with ceremony in 1992"
+    ],
+    answer: 1,
+    explanation: "Pemulwuy\u2019s head was removed after his death in 1802 and sent to Britain. It was finally returned to Australia in 2018 \u2014 over 200 years later. NAGPRA is a US law and does not apply to Australian remains."
+  },
+
+  // ── OPTION 6 continued: Source-Based Questions (2) ──
+  {
+    topic: 3, topicName: "Human Remains",
+    type: "source",
+    text: "Read Source A carefully, then answer the question below.",
+    source: {
+      label: "Source A",
+      quote: "Traitors and deserters are hanged on trees; the cowardly, the unwarlike, and those guilty of unnatural practices are pressed down under a hurdle into the slimy mud of a bog.",
+      attribution: "Tacitus, <em>Germania</em>, Chapter 12, c. 98 CE"
+    },
+    question: "Which of the following conclusions is BEST supported by this source?",
+    options: [
+      "All bog bodies were criminals punished for specific crimes",
+      "Bog bodies were exclusively victims of ritual sacrifice to gods",
+      "Some people in northern European societies may have been placed in bogs as a form of punishment",
+      "Tacitus personally witnessed the execution of bog body victims"
+    ],
+    answer: 2,
+    explanation: "Tacitus describes bog burial as a form of punishment, which suggests it is one possible explanation. However, he was a Roman senator writing from Rome \u2014 he never visited the regions he described and relied on secondhand accounts. The source supports punishment as one interpretation, but cannot confirm it was the only reason people were placed in bogs."
+  },
+  {
+    topic: 3, topicName: "Human Remains",
+    type: "matching",
+    text: "Apply the OVPRL framework to Source A (Tacitus, <em>Germania</em>, Ch. 12, c. 98 CE). Match each element to the correct analysis.",
+    pairs: [
+      { term: "O \u2014 Origin", def: "Written by Roman senator Tacitus in c. 98 CE, based on secondhand accounts" },
+      { term: "V \u2014 Value", def: "Provides the only surviving Roman account of why people may have been placed in bogs" },
+      { term: "P \u2014 Purpose", def: "Written to describe Germanic customs for a Roman audience and contrast them with Roman society" },
+      { term: "R \u2014 Reliability", def: "Limited \u2014 Tacitus never visited the regions he described and held Roman bias against \u2018barbarians\u2019" },
+      { term: "L \u2014 Limitations", def: "Written centuries before or after many bog body depositions; describes punishment, not ritual sacrifice" }
+    ],
+    explanation: "OVPRL is a framework for critically analysing sources. Origin tells us who wrote it and when. Value identifies what makes it useful. Purpose considers why it was written. Reliability assesses how trustworthy it is. Limitations identify what it cannot tell us. Tacitus is valuable but must be used cautiously \u2014 his Roman perspective and reliance on secondhand information are significant limitations."
+  },
+
+  // ── OPTION 6 continued: Lindow Man Inference (1) ──
+  {
+    topic: 3, topicName: "Human Remains",
+    type: "multiselect",
+    text: "Read the scientific evidence from Lindow Man. Select ALL the inferences that can be validly made from this evidence.",
+    evidence: "Lindow Man was discovered in 1984 in a peat bog in Cheshire, England. Radiocarbon dating placed him in the Iron Age to early Romano-British period (c. 2 BCE \u2013 119 CE). He was approximately 25 years old and about 168 cm tall. His fingernails were well-manicured with no signs of heavy manual labour on his hands. Analysis of his stomach contents revealed his last meal was a simple charred flatbread made from grain, with traces of mistletoe pollen. He had a trimmed beard and moustache. Forensic examination revealed three distinct injuries: a blow to the top of the head, a ligature (cord) around the neck indicating garrotting, and a cut throat. He was found without clothing.",
+    options: [
+      { text: "His well-manicured nails suggest he was not a manual labourer and may have held a higher social status", correct: true },
+      { text: "His last meal of grain-based flatbread indicates a simple, plant-based diet shortly before death", correct: true },
+      { text: "The three distinct injuries suggest his death was deliberate, not accidental", correct: true },
+      { text: "The mistletoe pollen in his stomach may have ritual significance, as mistletoe was considered sacred by Iron Age peoples", correct: true },
+      { text: "His preserved clothing provides valuable evidence of Iron Age textile production and fashion", correct: false },
+      { text: "The injuries prove conclusively that he was a criminal executed for a specific crime", correct: false },
+      { text: "His diet was primarily meat-based, indicating he was a wealthy member of his community", correct: false },
+      { text: "He was in good health and relatively young at the time of death", correct: true }
+    ],
+    explanation: "Five inferences are valid: (1) manicured nails \u2192 not a labourer/possible higher status, (2) grain-based last meal \u2192 plant diet, (3) three deliberate injuries \u2192 intentional killing, (4) mistletoe \u2192 possible ritual connection, (5) young and healthy. Three are incorrect: he was found WITHOUT clothing, so nothing can be inferred about fashion; physical evidence shows HOW he died but not WHY, so we cannot prove he was a criminal; and his last meal was grain-based, not meat-based."
+  },
+
+  // ── OPTION 6 continued: Lake Mungo (3) ──
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "Mungo Woman (LM1) is historically significant because she represents the:",
+    options: [
+      "Oldest known human burial in Australia",
+      "Oldest known human cremation in the world",
+      "Oldest known use of red ochre in a burial",
+      "Oldest known example of preserved DNA"
+    ],
+    answer: 1,
+    explanation: "Mungo Woman (LM1), approximately 40,000\u201342,000 years old, is the oldest known human cremation in the world. Her body was cremated, bones crushed, then reburied \u2014 a two-stage ritual."
+  },
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "True or False: Mungo Man (LM3) was covered in red ochre pigment sourced locally from the Willandra Lakes area.",
+    options: ["True", "False"],
+    answer: 1,
+    explanation: "False. The red ochre found on Mungo Man was sourced from up to 200 km away, suggesting long-distance trade networks or significant cultural effort in burial practices."
+  },
+  {
+    topic: 3, topicName: "Human Remains",
+    text: "The Traditional Custodians of the Lake Mungo area are:",
+    options: [
+      "The Wurundjeri, Boonwurrung, and Wathaurong peoples",
+      "The Paakantji, Ngyiampaa, and Mutthi Mutthi peoples",
+      "The Yolngu, Tiwi, and Arrernte peoples",
+      "The Gadigal, Darug, and Dharawal peoples"
+    ],
+    answer: 1,
+    explanation: "The Paakantji, Ngyiampaa, and Mutthi Mutthi peoples are the Traditional Custodians of the Willandra Lakes region, including Lake Mungo."
+  }
+];
+
+window.enterQuiz = function() {
+  document.getElementById('splashPage').classList.add('hidden');
+  document.getElementById('sidebar').style.display = '';
+  document.getElementById('mainPanel').style.display = '';
+};
+
+var current = 0;
+var scores = {1: 0, 2: 0, 3: 0};
+var totalByTopic = {1: 14, 2: 10, 3: 16};
+var totalQ = 40;
+var answered = new Array(totalQ).fill(false);
+var studentAnswers = [];
+
+function buildNav() {
+  var nav = document.getElementById('qNav');
+  var sections = [
+    { start: 0, end: 14, label: 'Sites &amp; Sources', cls: 't1' },
+    { start: 14, end: 24, label: 'Authentication', cls: 't2' },
+    { start: 24, end: 40, label: 'Human Remains', cls: 't3' }
+  ];
+  var html = '';
+  sections.forEach(function(sec) {
+    html += '<div class="nav-section">';
+    html += '<div class="nav-section-label ' + sec.cls + '">' + sec.label + '</div>';
+    html += '<div class="nav-grid">';
+    for (var i = sec.start; i < sec.end; i++) {
+      html += '<button class="q-nav-btn' + (i === 0 ? ' current' : '') + '" id="navBtn' + i + '" onclick="goToQuestion(' + i + ')">' + (i + 1) + '</button>';
+    }
+    html += '</div></div>';
+  });
+  nav.innerHTML = html;
+}
+
+function updateNav() {
+  for (var i = 0; i < totalQ; i++) {
+    var btn = document.getElementById('navBtn' + i);
+    btn.className = 'q-nav-btn';
+    if (i === current) btn.classList.add('current');
+    if (answered[i]) btn.classList.add('answered');
+  }
+}
+
+function goToQuestion(n) {
+  if (n < 0 || n >= totalQ) return;
+  document.getElementById('q' + current).classList.remove('active');
+  current = n;
+  document.getElementById('q' + current).classList.add('active');
+  updateProgress();
+  updateNav();
+  // Scroll main panel to top
+  document.getElementById('mainPanel').scrollTop = 0;
+}
+
+function markAnswered(qi) {
+  answered[qi] = true;
+  updateNav();
+  updateProgress();
+  // Show "See results" in nav when all answered
+  var allDone = answered.every(function(a) { return a; });
+  document.getElementById('navResultsBtn').classList.toggle('show', allDone);
+}
+
+// Layer positions as % of image height (mapped to South Alabama stratigraphic profile)
+var layerMap = [
+  { top: 18, h: 17 },  // 0 = Stratum A (modern surface)
+  { top: 35, h: 17 },  // 1 = Stratum B (historical)
+  { top: 52, h: 10 },  // 2 = Stratum C (older historical)
+  { top: 62, h: 10 },  // 3 = Stratum D (sand & gravel — natural)
+  { top: 72, h: 23 }   // 4 = Stratum E (ancient — oldest artefacts)
+];
+
+function stratIMG(qi) {
+  var html = '<div class="strat-wrap"><div class="strat-img-wrap">' +
+    '<img class="strat-img" src="strat-southalabama.jpg" alt="Stratigraphic profile showing five labelled strata with artefacts from different time periods">' +
+    '<div class="strat-overlay">';
+  layerMap.forEach(function(ly, li) {
+    html += '<div class="strat-layer" data-qi="'+qi+'" data-layer="'+li+'" ' +
+      'style="top:'+ly.top+'%;height:'+ly.h+'%;" onclick="selectLayer('+qi+','+li+')"></div>';
+  });
+  html += '</div></div>' +
+    '<div class="strat-hint">Click a stratum to answer</div>' +
+    '<div class="strat-credit">Diagram: Crow Canyon Archaeological Center, courtesy University of South Alabama</div>' +
+    '</div>';
+  return html;
+}
+
+function buildQuiz() {
+  var area = document.getElementById('quizArea');
+  area.innerHTML = '';
+  questions.forEach(function(q, i) {
+    var letters = ['A','B','C','D'];
+    var card = document.createElement('div');
+    card.className = 'card' + (i === 0 ? ' active' : '');
+    card.id = 'q' + i;
+
+    var topicClass = 't' + q.topic;
+    var html = '<div class="q-meta">' +
+      '<span class="q-number">Question ' + (i+1) + ' of ' + totalQ + '</span>' +
+      '<span class="q-topic ' + topicClass + '">' + q.topicName + '</span></div>' +
+      '<div class="q-text">' + q.text + '</div>';
+
+    if (q.image) {
+      html += '<img class="q-image" src="' + q.image.src + '" alt="' + q.image.alt + '">';
+      if (q.image.credit) html += '<div class="q-image-credit">' + q.image.credit + '</div>';
+    }
+
+    if (q.type === 'multiselect') {
+      html += '<div class="evidence-card"><div class="ev-label">Scientific Evidence</div>' + q.evidence + '</div>';
+      html += '<div class="ms-hint">Select all that apply \u2014 there are multiple correct answers.</div>';
+      html += '<div class="options" id="msOpts'+i+'">';
+      q.options.forEach(function(opt, oi) {
+        html += '<div class="ms-option" data-qi="'+i+'" data-oi="'+oi+'" onclick="toggleMs('+i+','+oi+')">' +
+          '<span class="ms-check">\u2713</span><span>'+opt.text+'</span></div>';
+      });
+      html += '</div>';
+      html += '<button class="ms-check-btn show" id="msCheck'+i+'" onclick="checkMs('+i+')">Check answers</button>';
+    } else if (q.type === 'source') {
+      html += '<div class="source-box"><div class="source-label">' + q.source.label + '</div>' +
+        '<blockquote>\u201C' + q.source.quote + '\u201D</blockquote>' +
+        '<div class="source-attr">\u2014 ' + q.source.attribution + '</div></div>';
+      html += '<div class="q-text" style="font-family:var(--font-body);font-size:0.95rem;margin-bottom:1.25rem;">' + q.question + '</div>';
+      html += '<div class="options">';
+      q.options.forEach(function(opt, oi) {
+        html += '<button class="option-btn" data-q="' + i + '" data-opt="' + oi + '" onclick="selectAnswer(' + i + ',' + oi + ')">' +
+          '<span class="opt-letter">' + letters[oi] + '</span><span>' + opt + '</span></button>';
+      });
+      html += '</div>';
+    } else if (q.type === 'peel-label') {
+      html += '<div class="peel-sentences" id="peelLabel'+i+'">';
+      q.sentences.forEach(function(s, si) {
+        html += '<div class="peel-sentence" data-qi="'+i+'" data-si="'+si+'">' +
+          '<button class="peel-label-btn" data-val="?" data-qi="'+i+'" data-si="'+si+'" onclick="cyclePeelLabel('+i+','+si+')">?</button>' +
+          '<span>'+s.text+'</span></div>';
+      });
+      html += '</div>';
+      html += '<button class="peel-check-btn" id="peelCheck'+i+'" onclick="checkPeelLabel('+i+')">Check answers</button>';
+    } else if (q.type === 'peel-order') {
+      var order = q.sentences.map(function(_, idx) { return idx; });
+      for (var sh = order.length - 1; sh > 0; sh--) {
+        var rr = Math.floor(Math.random() * (sh + 1));
+        var tmp = order[sh]; order[sh] = order[rr]; order[rr] = tmp;
+      }
+      q._currentOrder = order.slice();
+      html += '<div class="peel-sentences" id="peelOrder'+i+'">';
+      order.forEach(function(si, pos) {
+        html += '<div class="peel-order-item" data-qi="'+i+'" data-origIdx="'+si+'">' +
+          '<div class="peel-arrows">' +
+          '<button class="peel-arrow-btn" onclick="movePeelItem('+i+','+pos+',-1)">\u25B2</button>' +
+          '<button class="peel-arrow-btn" onclick="movePeelItem('+i+','+pos+',1)">\u25BC</button>' +
+          '</div>' +
+          '<span class="peel-pos">'+(pos+1)+'</span>' +
+          '<span>'+q.sentences[si].text+'</span></div>';
+      });
+      html += '</div>';
+      html += '<button class="peel-check-btn show" id="peelCheck'+i+'" onclick="checkPeelOrder('+i+')">Check order</button>';
+    } else if (q.type === 'hotspot') {
+      html += stratIMG(i);
+    } else if (q.type === 'cloze') {
+      // Build passage with inline <select> elements
+      var p = q.passage;
+      q.blanks.forEach(function(b, bi) {
+        var sel = '<select class="cloze-blank" data-qi="'+i+'" data-bi="'+bi+'" onchange="clozeChanged('+i+')">' +
+          '<option value="">\u2014 select \u2014</option>';
+        // Shuffle options for display
+        var opts = b.options.slice();
+        for (var s = opts.length - 1; s > 0; s--) {
+          var r = Math.floor(Math.random() * (s + 1));
+          var tmp = opts[s]; opts[s] = opts[r]; opts[r] = tmp;
+        }
+        opts.forEach(function(o) {
+          sel += '<option value="'+o+'">'+o+'</option>';
+        });
+        sel += '</select>';
+        p = p.replace('{{'+bi+'}}', sel);
+      });
+      html += '<div class="cloze-passage">' + p + '</div>';
+      html += '<button class="cloze-check-btn" id="clozeCheck'+i+'" onclick="checkCloze('+i+')">Check answers</button>';
+    } else if (q.type === 'matching') {
+      var defOrder = q.pairs.map(function(_, idx) { return idx; });
+      for (var s = defOrder.length - 1; s > 0; s--) {
+        var j = Math.floor(Math.random() * (s + 1));
+        var tmp = defOrder[s]; defOrder[s] = defOrder[j]; defOrder[j] = tmp;
+      }
+      q._defOrder = defOrder;
+      var pc = ['#5b9bd5','#ff9764','#6bc48d','#b07cc8','#e8743a','#d4a050'];
+      html += '<div class="match-hint">Click a term, then click its matching definition.</div>';
+      html += '<div class="match-grid"><div class="match-col"><div class="match-col-label">Term</div>';
+      q.pairs.forEach(function(p, pi) {
+        html += '<div class="match-term" data-qi="'+i+'" data-ti="'+pi+'" onclick="selectTerm('+i+','+pi+')">' +
+          '<span class="match-num" style="background:'+pc[pi]+'">'+(pi+1)+'</span>' +
+          '<span>'+p.term+'</span></div>';
+      });
+      html += '</div><div class="match-col"><div class="match-col-label">Definition</div>';
+      defOrder.forEach(function(di) {
+        html += '<div class="match-def" data-qi="'+i+'" data-di="'+di+'" onclick="selectDef('+i+','+di+')">' +
+          '<span class="match-num-slot" id="slot-'+i+'-'+di+'"></span>' +
+          '<span>'+q.pairs[di].def+'</span></div>';
+      });
+      html += '</div></div>';
+      html += '<button class="match-check-btn" id="matchCheck'+i+'" onclick="checkMatch('+i+')">Check answers</button>';
+    } else {
+      html += '<div class="options">';
+      q.options.forEach(function(opt, oi) {
+        html += '<button class="option-btn" data-q="' + i + '" data-opt="' + oi + '" onclick="selectAnswer(' + i + ',' + oi + ')">' +
+          '<span class="opt-letter">' + letters[oi] + '</span><span>' + opt + '</span></button>';
+      });
+      html += '</div>';
+    }
+
+    html += '<div class="feedback" id="fb' + i + '"></div>' +
+      '<button class="next-btn" id="next' + i + '" onclick="nextQuestion()">' +
+      (i < totalQ - 1 ? 'Next question \u2192' : 'See results \u2192') + '</button>';
+
+    card.innerHTML = html;
+    area.appendChild(card);
+  });
+  updateProgress();
+  buildNav();
+}
+
+function selectAnswer(qi, oi) {
+  var q = questions[qi];
+  var btns = document.querySelectorAll('[data-q="' + qi + '"]');
+  // Prevent re-answering
+  if (btns[0].classList.contains('locked')) return;
+
+  btns.forEach(function(btn) {
+    btn.classList.add('locked');
+    var idx = parseInt(btn.getAttribute('data-opt'));
+    if (idx === q.answer) btn.classList.add('correct');
+    if (idx === oi && idx !== q.answer) btn.classList.add('incorrect');
+  });
+
+  var fb = document.getElementById('fb' + qi);
+  var isCorrect = oi === q.answer;
+  if (isCorrect) scores[q.topic]++;
+  fb.className = 'feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+  fb.innerHTML = (isCorrect ? '<strong>Correct!</strong> ' : '<strong>Not quite.</strong> ') + q.explanation;
+
+  studentAnswers[qi] = {
+    correct: isCorrect,
+    selected: q.options[oi],
+    correctAnswer: q.options[q.answer]
+  };
+
+  markAnswered(qi);
+  document.getElementById('next' + qi).classList.add('show');
+}
+
+window.selectLayer = function(qi, layerIdx) {
+  var q = questions[qi];
+  var layers = document.querySelectorAll('[data-qi="' + qi + '"]');
+  if (layers[0].classList.contains('locked')) return;
+
+  layers.forEach(function(layer) {
+    layer.classList.add('locked');
+    var idx = parseInt(layer.getAttribute('data-layer'));
+    if (idx === q.answer) layer.classList.add('hl-correct');
+    if (idx === layerIdx && idx !== q.answer) layer.classList.add('hl-incorrect');
+  });
+
+  var fb = document.getElementById('fb' + qi);
+  var isCorrect = layerIdx === q.answer;
+  if (isCorrect) scores[q.topic]++;
+  fb.className = 'feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+  fb.innerHTML = (isCorrect ? '<strong>Correct!</strong> ' : '<strong>Not quite.</strong> ') + q.explanation;
+
+  var layerNames = ['Stratum A','Stratum B','Stratum C','Stratum D','Stratum E'];
+  studentAnswers[qi] = {
+    correct: isCorrect,
+    selected: layerNames[layerIdx] || ('Layer ' + layerIdx),
+    correctAnswer: layerNames[q.answer] || ('Layer ' + q.answer)
+  };
+
+  markAnswered(qi);
+  document.getElementById('next' + qi).classList.add('show');
+};
+
+// Multi-select interaction
+window.toggleMs = function(qi, oi) {
+  var el = document.querySelector('.ms-option[data-qi="'+qi+'"][data-oi="'+oi+'"]');
+  if (el.classList.contains('locked')) return;
+  el.classList.toggle('selected');
+};
+
+window.checkMs = function(qi) {
+  var q = questions[qi];
+  var opts = document.querySelectorAll('.ms-option[data-qi="'+qi+'"]');
+  var numCorrectSelected = 0;
+  var numIncorrectSelected = 0;
+  var totalCorrect = q.options.filter(function(o) { return o.correct; }).length;
+  var detail = [];
+
+  opts.forEach(function(el, oi) {
+    el.classList.add('locked');
+    var isSelected = el.classList.contains('selected');
+    var isCorrect = q.options[oi].correct;
+
+    if (isSelected && isCorrect) { el.classList.add('ms-correct'); numCorrectSelected++; }
+    else if (isSelected && !isCorrect) { el.classList.add('ms-incorrect'); numIncorrectSelected++; }
+    else if (!isSelected && isCorrect) { el.classList.add('ms-missed'); }
+
+    detail.push({
+      text: q.options[oi].text.substring(0, 60) + '...',
+      selected: isSelected,
+      correct: isCorrect,
+      isRight: isSelected === isCorrect
+    });
+  });
+
+  var perfect = numCorrectSelected === totalCorrect && numIncorrectSelected === 0;
+  if (perfect) scores[q.topic]++;
+
+  studentAnswers[qi] = {
+    correct: perfect,
+    type: 'multiselect',
+    numCorrectSelected: numCorrectSelected,
+    numIncorrectSelected: numIncorrectSelected,
+    totalCorrect: totalCorrect,
+    detail: detail
+  };
+
+  var fb = document.getElementById('fb' + qi);
+  fb.className = 'feedback show ' + (perfect ? 'correct' : 'incorrect');
+  fb.innerHTML = (perfect
+    ? '<strong>Perfect! All ' + totalCorrect + ' correct inferences selected.</strong> '
+    : '<strong>' + numCorrectSelected + '/' + totalCorrect + ' correct selected'
+      + (numIncorrectSelected > 0 ? ', ' + numIncorrectSelected + ' incorrect' : '')
+      + '.</strong> Dashed outlines show correct answers you missed. ') + q.explanation;
+
+  document.getElementById('msCheck'+qi).style.display = 'none';
+  markAnswered(qi);
+  document.getElementById('next' + qi).classList.add('show');
+};
+
+// PEEL Label interaction
+var peelLabels = ['?','P','E','L'];
+window.cyclePeelLabel = function(qi, si) {
+  var btn = document.querySelector('.peel-label-btn[data-qi="'+qi+'"][data-si="'+si+'"]');
+  if (btn.classList.contains('locked')) return;
+  var cur = btn.getAttribute('data-val');
+  var idx = peelLabels.indexOf(cur);
+  var next = peelLabels[(idx + 1) % peelLabels.length];
+  btn.setAttribute('data-val', next);
+  btn.textContent = next;
+  // Show check button if all labelled
+  var allSet = true;
+  questions[qi].sentences.forEach(function(s, i) {
+    var b = document.querySelector('.peel-label-btn[data-qi="'+qi+'"][data-si="'+i+'"]');
+    if (b.getAttribute('data-val') === '?') allSet = false;
+  });
+  var checkBtn = document.getElementById('peelCheck'+qi);
+  if (allSet) checkBtn.classList.add('show');
+  else checkBtn.classList.remove('show');
+};
+
+window.checkPeelLabel = function(qi) {
+  var q = questions[qi];
+  var numCorrect = 0;
+  var detail = [];
+  q.sentences.forEach(function(s, si) {
+    var btn = document.querySelector('.peel-label-btn[data-qi="'+qi+'"][data-si="'+si+'"]');
+    var row = document.querySelector('.peel-sentence[data-qi="'+qi+'"][data-si="'+si+'"]');
+    btn.classList.add('locked');
+    var picked = btn.getAttribute('data-val');
+    var isRight = picked === s.label;
+    if (isRight) { row.classList.add('peel-correct'); numCorrect++; }
+    else { row.classList.add('peel-incorrect'); }
+    detail.push({ selected: picked, correct: s.label, isRight: isRight });
+  });
+
+  var allCorrect = numCorrect === q.sentences.length;
+  if (allCorrect) scores[q.topic]++;
+
+  studentAnswers[qi] = { correct: allCorrect, type: 'peel-label', detail: detail, numCorrect: numCorrect, total: q.sentences.length };
+
+  var fb = document.getElementById('fb' + qi);
+  fb.className = 'feedback show ' + (allCorrect ? 'correct' : 'incorrect');
+  fb.innerHTML = (allCorrect
+    ? '<strong>All labels correct!</strong> '
+    : '<strong>' + numCorrect + '/' + q.sentences.length + ' correct.</strong> ') + q.explanation;
+
+  document.getElementById('peelCheck'+qi).style.display = 'none';
+  markAnswered(qi);
+  document.getElementById('next' + qi).classList.add('show');
+};
+
+// PEEL Order interaction
+window.movePeelItem = function(qi, pos, dir) {
+  var q = questions[qi];
+  var order = q._currentOrder;
+  var newPos = pos + dir;
+  if (newPos < 0 || newPos >= order.length) return;
+  // Swap
+  var tmp = order[pos]; order[pos] = order[newPos]; order[newPos] = tmp;
+  // Re-render
+  var container = document.getElementById('peelOrder'+qi);
+  var items = container.querySelectorAll('.peel-order-item');
+  // Rebuild innerHTML
+  var html = '';
+  order.forEach(function(si, p) {
+    html += '<div class="peel-order-item" data-qi="'+qi+'" data-origIdx="'+si+'">' +
+      '<div class="peel-arrows">' +
+      '<button class="peel-arrow-btn" onclick="movePeelItem('+qi+','+p+',-1)">\u25B2</button>' +
+      '<button class="peel-arrow-btn" onclick="movePeelItem('+qi+','+p+',1)">\u25BC</button>' +
+      '</div>' +
+      '<span class="peel-pos">'+(p+1)+'</span>' +
+      '<span>'+q.sentences[si].text+'</span></div>';
+  });
+  container.innerHTML = html;
+};
+
+window.checkPeelOrder = function(qi) {
+  var q = questions[qi];
+  var order = q._currentOrder;
+  var numCorrect = 0;
+  var peelNames = ['P','E','E','L'];
+  var container = document.getElementById('peelOrder'+qi);
+  var items = container.querySelectorAll('.peel-order-item');
+  var detail = [];
+
+  items.forEach(function(item, pos) {
+    var origIdx = parseInt(item.getAttribute('data-origIdx'));
+    var isRight = origIdx === pos;
+    if (isRight) { item.classList.add('peel-correct'); numCorrect++; }
+    else { item.classList.add('peel-incorrect'); }
+    // Disable arrows
+    item.querySelectorAll('.peel-arrow-btn').forEach(function(b) { b.classList.add('locked'); b.onclick = null; });
+    detail.push({ placed: peelNames[origIdx], correctPos: peelNames[pos], isRight: isRight });
+  });
+
+  var allCorrect = numCorrect === q.sentences.length;
+  if (allCorrect) scores[q.topic]++;
+
+  studentAnswers[qi] = { correct: allCorrect, type: 'peel-order', numCorrect: numCorrect, total: q.sentences.length };
+
+  var fb = document.getElementById('fb' + qi);
+  fb.className = 'feedback show ' + (allCorrect ? 'correct' : 'incorrect');
+  fb.innerHTML = (allCorrect
+    ? '<strong>Perfect order!</strong> '
+    : '<strong>' + numCorrect + '/4 in the correct position.</strong> ') + q.explanation;
+
+  document.getElementById('peelCheck'+qi).style.display = 'none';
+  markAnswered(qi);
+  document.getElementById('next' + qi).classList.add('show');
+};
+
+// Cloze interaction
+window.clozeChanged = function(qi) {
+  var q = questions[qi];
+  var allFilled = true;
+  q.blanks.forEach(function(b, bi) {
+    var sel = document.querySelector('.cloze-blank[data-qi="'+qi+'"][data-bi="'+bi+'"]');
+    if (!sel.value) allFilled = false;
+  });
+  var btn = document.getElementById('clozeCheck'+qi);
+  if (allFilled) btn.classList.add('show');
+  else btn.classList.remove('show');
+};
+
+window.checkCloze = function(qi) {
+  var q = questions[qi];
+  var numCorrect = 0;
+  var clozeDetail = [];
+  q.blanks.forEach(function(b, bi) {
+    var sel = document.querySelector('.cloze-blank[data-qi="'+qi+'"][data-bi="'+bi+'"]');
+    sel.classList.add('locked');
+    var isRight = sel.value === b.answer;
+    if (isRight) { sel.classList.add('correct'); numCorrect++; }
+    else { sel.classList.add('incorrect'); }
+    clozeDetail.push({ selected: sel.value, correct: b.answer, isRight: isRight });
+  });
+
+  var allCorrect = numCorrect === q.blanks.length;
+  if (allCorrect) scores[q.topic]++;
+
+  studentAnswers[qi] = {
+    correct: allCorrect,
+    type: 'cloze',
+    detail: clozeDetail,
+    numCorrect: numCorrect,
+    total: q.blanks.length
+  };
+
+  var fb = document.getElementById('fb' + qi);
+  fb.className = 'feedback show ' + (allCorrect ? 'correct' : 'incorrect');
+  fb.innerHTML = (allCorrect
+    ? '<strong>All ' + q.blanks.length + ' blanks correct!</strong> '
+    : '<strong>' + numCorrect + '/' + q.blanks.length + ' correct.</strong> ') + q.explanation;
+
+  document.getElementById('clozeCheck'+qi).style.display = 'none';
+  markAnswered(qi);
+  document.getElementById('next' + qi).classList.add('show');
+};
+
+// Matching interaction
+var matchState = {};
+var pairColors = ['#5b9bd5','#ff9764','#6bc48d','#b07cc8','#e8743a','#d4a050'];
+
+window.selectTerm = function(qi, ti) {
+  if (!matchState[qi]) matchState[qi] = { selected: -1, matches: {}, locked: false };
+  var st = matchState[qi];
+  if (st.locked) return;
+  var prev = document.querySelector('.match-term[data-qi="'+qi+'"].selected');
+  if (prev) prev.classList.remove('selected');
+  if (st.selected === ti) { st.selected = -1; return; }
+  st.selected = ti;
+  document.querySelector('.match-term[data-qi="'+qi+'"][data-ti="'+ti+'"]').classList.add('selected');
+};
+
+window.selectDef = function(qi, di) {
+  if (!matchState[qi]) matchState[qi] = { selected: -1, matches: {}, locked: false };
+  var st = matchState[qi];
+  if (st.locked || st.selected === -1) return;
+  var ti = st.selected;
+
+  // Remove existing match for this term
+  Object.keys(st.matches).forEach(function(k) {
+    if (st.matches[k] === ti) {
+      delete st.matches[k];
+      var s = document.getElementById('slot-'+qi+'-'+k);
+      s.innerHTML = ''; s.className = 'match-num-slot'; s.style.background = '';
+      document.querySelector('.match-def[data-qi="'+qi+'"][data-di="'+k+'"]').classList.remove('paired');
+    }
+  });
+
+  // Remove existing match for this definition
+  if (st.matches[di] !== undefined) {
+    delete st.matches[di];
+  }
+
+  // Create match
+  st.matches[di] = ti;
+  var slot = document.getElementById('slot-'+qi+'-'+di);
+  slot.innerHTML = (ti+1);
+  slot.style.background = pairColors[ti];
+  slot.className = 'match-num-slot active';
+  document.querySelector('.match-def[data-qi="'+qi+'"][data-di="'+di+'"]').classList.add('paired');
+
+  // Deselect term
+  document.querySelector('.match-term[data-qi="'+qi+'"].selected').classList.remove('selected');
+  st.selected = -1;
+
+  // Show check button if all matched
+  if (Object.keys(st.matches).length === questions[qi].pairs.length) {
+    document.getElementById('matchCheck'+qi).classList.add('show');
+  }
+};
+
+window.checkMatch = function(qi) {
+  var st = matchState[qi];
+  if (st.locked) return;
+  st.locked = true;
+  var q = questions[qi];
+  var numCorrect = 0;
+
+  Object.keys(st.matches).forEach(function(di) {
+    var ti = st.matches[di];
+    var defEl = document.querySelector('.match-def[data-qi="'+qi+'"][data-di="'+di+'"]');
+    if (parseInt(di) === ti) { defEl.classList.add('match-correct'); numCorrect++; }
+    else { defEl.classList.add('match-incorrect'); }
+  });
+
+  document.querySelectorAll('.match-term[data-qi="'+qi+'"]').forEach(function(el) { el.classList.add('locked'); });
+  document.querySelectorAll('.match-def[data-qi="'+qi+'"]').forEach(function(el) { el.classList.add('locked'); });
+
+  var allCorrect = numCorrect === q.pairs.length;
+  if (allCorrect) scores[q.topic]++;
+
+  var matchDetail = [];
+  Object.keys(st.matches).forEach(function(di) {
+    var ti = st.matches[di];
+    matchDetail.push({
+      term: q.pairs[ti].term,
+      selected: q.pairs[parseInt(di)].def,
+      correct: q.pairs[ti].def,
+      isRight: parseInt(di) === ti
+    });
+  });
+  studentAnswers[qi] = {
+    correct: allCorrect,
+    type: 'matching',
+    detail: matchDetail,
+    numCorrect: numCorrect,
+    total: q.pairs.length
+  };
+
+  var fb = document.getElementById('fb' + qi);
+  fb.className = 'feedback show ' + (allCorrect ? 'correct' : 'incorrect');
+  fb.innerHTML = (allCorrect
+    ? '<strong>All ' + q.pairs.length + ' correct!</strong> '
+    : '<strong>' + numCorrect + '/' + q.pairs.length + ' correct.</strong> ') + q.explanation;
+
+  document.getElementById('matchCheck'+qi).style.display = 'none';
+  markAnswered(qi);
+  document.getElementById('next' + qi).classList.add('show');
+};
+
+function nextQuestion() {
+  if (current >= totalQ - 1) {
+    showResults();
+    return;
+  }
+  goToQuestion(current + 1);
+}
+
+function updateProgress() {
+  var count = answered.filter(function(a) { return a; }).length;
+  document.getElementById('progressBar').style.width = ((count / totalQ) * 100) + '%';
+  var pt = document.getElementById('progressText');
+  if (pt) pt.textContent = count + ' / ' + totalQ;
+}
+
+function showResults() {
+  document.getElementById('q' + current).classList.remove('active');
+  document.getElementById('progressBar').style.width = '100%';
+  var total = scores[1] + scores[2] + scores[3];
+  var pct = Math.round((total / totalQ) * 100);
+
+  document.getElementById('scoreBig').textContent = total + '/' + totalQ;
+  document.getElementById('scoreLabel').textContent = pct + '% \u2014 ' + getGrade(pct);
+  document.getElementById('score1').textContent = scores[1] + '/14';
+  document.getElementById('score2').textContent = scores[2] + '/10';
+  document.getElementById('score3').textContent = scores[3] + '/16';
+
+  document.getElementById('resultsCard').classList.add('active');
+}
+
+function getGrade(pct) {
+  if (pct >= 90) return 'Outstanding!';
+  if (pct >= 75) return 'Great work!';
+  if (pct >= 60) return 'Good effort \u2014 keep revising!';
+  if (pct >= 40) return 'Getting there \u2014 review your weak areas.';
+  return 'More revision needed \u2014 revisit your notes.';
+}
+
+function copyResults() {
+  var total = scores[1] + scores[2] + scores[3];
+  var pct = Math.round((total / totalQ) * 100);
+  var lines = [];
+  lines.push('Can You Dig It? \u2014 Ancient History Revision Quiz');
+  lines.push('Score: ' + total + '/' + totalQ + ' (' + pct + '%)');
+  lines.push('Sites & Sources: ' + scores[1] + '/12 | Authentication: ' + scores[2] + '/10 | Human Remains: ' + scores[3] + '/16');
+  lines.push('');
+
+  var sections = [
+    { label: 'SITES & SOURCES', start: 0, end: 14 },
+    { label: 'AUTHENTICATION', start: 14, end: 24 },
+    { label: 'HUMAN REMAINS', start: 24, end: 40 }
+  ];
+
+  sections.forEach(function(sec) {
+    lines.push('--- ' + sec.label + ' ---');
+    for (var i = sec.start; i < sec.end; i++) {
+      var q = questions[i];
+      var a = studentAnswers[i];
+      var qNum = 'Q' + (i + 1) + '. ';
+      // Truncate question text for readability
+      var qText = q.text.length > 80 ? q.text.substring(0, 77) + '...' : q.text;
+
+      if (!a) {
+        lines.push(qNum + qText);
+        lines.push('   \u2014 Not answered');
+      } else if (a.type === 'cloze') {
+        lines.push(qNum + 'Cloze passage (Piltdown Man) \u2014 ' + a.numCorrect + '/' + a.total);
+        a.detail.forEach(function(d) {
+          lines.push('   ' + (d.isRight ? '\u2713' : '\u2717') + ' ' + d.selected + (d.isRight ? '' : ' \u2192 ' + d.correct));
+        });
+      } else if (a.type === 'matching') {
+        lines.push(qNum + 'Matching \u2014 ' + a.numCorrect + '/' + a.total);
+        a.detail.forEach(function(d) {
+          lines.push('   ' + (d.isRight ? '\u2713' : '\u2717') + ' ' + d.term + ' = ' + d.selected + (d.isRight ? '' : ' \u2192 ' + d.correct));
+        });
+      } else {
+        lines.push(qNum + qText);
+        if (a.correct) {
+          lines.push('   \u2713 ' + a.selected);
+        } else {
+          lines.push('   \u2717 ' + a.selected + ' \u2192 ' + a.correctAnswer);
+        }
+      }
+    }
+    lines.push('');
+  });
+
+  navigator.clipboard.writeText(lines.join('\n')).then(function() {
+    var btn = document.getElementById('copyBtn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() {
+      btn.textContent = 'Copy results to clipboard';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+function restartQuiz() {
+  current = 0;
+  scores = {1: 0, 2: 0, 3: 0};
+  answered = new Array(totalQ).fill(false);
+  studentAnswers = [];
+  matchState = {};
+  document.getElementById('resultsCard').classList.remove('active');
+  buildQuiz();
+}
+
+buildQuiz();
+</script>
+
+</body>
+</html>
