@@ -210,8 +210,10 @@
     width: 16px; height: 16px; border-radius: 4px; border: 2px solid var(--border);
   }
   .reveal-btn-wrap {
-    text-align: center; margin-top: 2rem;
+    position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: none;
   }
+  .reveal-btn-wrap.visible { display: block; }
   .reveal-btn {
     display: inline-flex; align-items: center; gap: 0.5rem;
     padding: 0.85rem 2rem; font-size: 0.88rem; font-weight: 700; font-family: var(--font-body);
@@ -597,10 +599,12 @@
         </div>
       </div>
 
-      <div class="reveal-btn-wrap">
-        <button class="reveal-btn" id="revealBtn" onclick="revealNext()">Reveal next <span class="arrow">&rarr;</span></button>
-      </div>
     </div>
+  </div>
+
+  <!-- Floating reveal button (visible only on Deconstruct panel) -->
+  <div class="reveal-btn-wrap" id="revealBtnWrap">
+    <button class="reveal-btn" id="revealBtn" onclick="revealNext()">Reveal next <span class="arrow">&rarr;</span></button>
   </div>
 
   <!-- ═══ 05 EXEMPLAR — INTRODUCTION ═══ -->
@@ -985,6 +989,14 @@
     // Update arrow buttons
     document.getElementById('prevBtn').disabled = (index === 0);
     document.getElementById('nextBtn').disabled = (index === panels.length - 1);
+
+    // Show floating reveal button only on Deconstruct panel
+    var revealWrap = document.getElementById('revealBtnWrap');
+    if (panels[index] === 'deconstruct') {
+      revealWrap.classList.add('visible');
+    } else {
+      revealWrap.classList.remove('visible');
+    }
 
     // Scroll main panel to top
     mainPanel.scrollTop = 0;
