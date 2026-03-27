@@ -113,25 +113,24 @@
     background: var(--accent-bg); padding: 0.35em 1em; border-radius: 100px; margin-bottom: 1rem;
   }
 
-  /* ── HERO (Overview panel) ── */
-  .hero-panel { background: var(--accent); min-height: 100vh; display: flex; align-items: center; }
-  .hero-panel.active { display: flex; }
+  /* ── BANNER (Overview panel) ── */
+  .hero-panel { background: var(--accent); min-height: auto; display: flex; align-items: flex-start; padding: 2rem 2.5rem; border-radius: var(--radius); margin-bottom: 1.5rem; }
   .hero-inner { max-width: 700px; }
   .hero-label {
-    display: inline-block; font-size: 0.72rem; font-weight: 700;
+    display: inline-block; font-size: 0.68rem; font-weight: 700;
     letter-spacing: 0.12em; text-transform: uppercase; color: var(--text);
-    background: rgba(255,255,255,0.5); padding: 0.35em 1em; border-radius: 100px; margin-bottom: 1.5rem;
+    background: rgba(255,255,255,0.5); padding: 0.35em 1em; border-radius: 100px; margin-bottom: 0.75rem;
   }
   .hero-panel h1 {
-    font-family: var(--font-display); font-size: clamp(2.4rem, 5.5vw, 3.8rem);
-    font-weight: 400; line-height: 1.15; margin-bottom: 1rem; color: var(--text);
+    font-family: var(--font-display); font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+    font-weight: 400; line-height: 1.2; margin-bottom: 0.4rem; color: var(--text);
   }
   .hero-subtitle {
-    font-family: var(--font-body); font-size: clamp(0.88rem, 1.8vw, 1.05rem);
+    font-family: var(--font-body); font-size: clamp(0.85rem, 1.6vw, 0.95rem);
     font-weight: 600; letter-spacing: 0.02em; color: var(--text); opacity: 0.65;
-    max-width: 550px; margin-bottom: 0.5rem;
+    max-width: 550px; margin-bottom: 0.3rem;
   }
-  .hero-panel p { font-size: 1.05rem; color: var(--text); opacity: 0.7; max-width: 550px; line-height: 1.6; }
+  .hero-panel p { font-size: 0.92rem; color: var(--text); opacity: 0.7; max-width: 550px; line-height: 1.5; }
 
   /* ── LISC TABLE ── */
   .lisc-table {
@@ -421,15 +420,14 @@
   <div class="sidebar-label">Chapters</div>
   <ul class="sidebar-nav" id="sidebarNav">
     <li><button class="active" data-panel="overview"><span class="nav-num">01</span> Overview</button></li>
-    <li><button data-panel="lisc"><span class="nav-num">02</span> Learning Intentions</button></li>
-    <li><button data-panel="question"><span class="nav-num">03</span> The Question</button></li>
-    <li><button data-panel="deconstruct"><span class="nav-num">04</span> Deconstruct</button></li>
-    <li><button data-panel="exemplar-intro"><span class="nav-num">05</span> Introduction</button></li>
-    <li><button data-panel="exemplar-p1"><span class="nav-num">06</span> Paragraph 1</button></li>
-    <li><button data-panel="exemplar-p2"><span class="nav-num">07</span> Paragraph 2</button></li>
-    <li><button data-panel="exemplar-p3"><span class="nav-num">08</span> Paragraph 3</button></li>
-    <li><button data-panel="exemplar-conc"><span class="nav-num">09</span> Conclusion</button></li>
-    <li><button data-panel="features"><span class="nav-num">10</span> Feature Guide</button></li>
+    <li><button data-panel="question"><span class="nav-num">02</span> The Question</button></li>
+    <li><button data-panel="deconstruct"><span class="nav-num">03</span> Deconstruct</button></li>
+    <li><button data-panel="exemplar-intro"><span class="nav-num">04</span> Introduction</button></li>
+    <li><button data-panel="exemplar-p1"><span class="nav-num">05</span> Paragraph 1</button></li>
+    <li><button data-panel="exemplar-p2"><span class="nav-num">06</span> Paragraph 2</button></li>
+    <li><button data-panel="exemplar-p3"><span class="nav-num">07</span> Paragraph 3</button></li>
+    <li><button data-panel="exemplar-conc"><span class="nav-num">08</span> Conclusion</button></li>
+    <li><button data-panel="features"><span class="nav-num">09</span> Feature Guide</button></li>
   </ul>
   <div class="sidebar-footer">Ancient History &middot; Extended Response</div>
 </aside>
@@ -438,20 +436,19 @@
 <div class="main-panel" id="mainPanel">
 
   <!-- Page counter -->
-  <div class="page-counter"><span class="current" id="currentPage">1</span>/10</div>
+  <div class="page-counter"><span class="current" id="currentPage">1</span>/9</div>
 
   <!-- ═══ 01 OVERVIEW ═══ -->
-  <div class="panel hero-panel active" id="panel-overview">
-    <div class="hero-inner">
-      <span class="hero-label">Ancient History &middot; Extended Response</span>
-      <h1>The Treatment and Display of Human Remains</h1>
-      <p class="hero-subtitle">How to Write a Band 5/6 Extended Response</p>
-      <p>Deconstruct the question, analyse a model answer paragraph by paragraph, and master the PEEL structure.</p>
+  <div class="panel active" id="panel-overview">
+    <div class="hero-panel">
+      <div class="hero-inner">
+        <span class="hero-label">Ancient History &middot; Extended Response</span>
+        <h1>The Treatment and Display of Human Remains</h1>
+        <p class="hero-subtitle">How to Write a Band 5/6 Extended Response</p>
+        <p>Deconstruct the question, analyse a model answer paragraph by paragraph, and master the PEEL structure.</p>
+      </div>
     </div>
-  </div>
 
-  <!-- ═══ 02 LEARNING INTENTIONS ═══ -->
-  <div class="panel" id="panel-lisc">
     <span class="section-label">Learning Intentions &amp; Success Criteria</span>
     <h2>What We&rsquo;re Learning</h2>
     <table class="lisc-table">
@@ -960,7 +957,7 @@
 <script>
 (function() {
   var panels = [
-    'overview', 'lisc', 'question', 'deconstruct',
+    'overview', 'question', 'deconstruct',
     'exemplar-intro', 'exemplar-p1', 'exemplar-p2', 'exemplar-p3', 'exemplar-conc',
     'features'
   ];
